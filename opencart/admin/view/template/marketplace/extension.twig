@@ -1,0 +1,38 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-puzzle-piece"></i> {{ text_list }}</div>
+      <div class="card-body">
+        <fieldset>
+          <legend>{{ text_type }}</legend>
+          <div class="card bg-light">
+            <div class="card-body">
+              <div class="input-group">
+                <select name="type" id="input-type" class="form-select">
+                  {% for category in categories %}
+                    <option value="{{ category.href }}"{% if type == category.code %} selected{% endif %}>{{ category.text }}</option>
+                  {% endfor %}
+                </select>
+                <div class="input-group-text"><i class="fa-solid fa-filter"></i>&nbsp;{{ text_filter }}</div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <div id="extension">{{ extension }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="view/javascript/extension.js"></script>
+{{ footer }}

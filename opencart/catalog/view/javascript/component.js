@@ -1,0 +1,1 @@
+export { WebComponent, Controller } from '../../../assets/framework/component.js';

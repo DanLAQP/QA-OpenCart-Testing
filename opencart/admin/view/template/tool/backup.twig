@@ -1,0 +1,55 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end"><button type="button" id="button-upload" title="{{ button_upload }}" class="btn btn-primary"><i class="fa-solid fa-upload"></i></button></div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-exchange-alt"></i> {{ heading_title }}</div>
+      <div class="card-body">
+        <fieldset>
+          <legend>{{ text_option }}</legend>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_export }}</label>
+            <div class="col-sm-10">
+              <div id="input-backup" class="form-control" style="height: 150px; overflow: auto;">
+                <div class="form-check">
+                  <checkbox-all input-id="input-backup-all" target="#input-backup"></checkbox-all>
+                  <label for="input-backup-all" class="form-check-label">{{ text_all }}</label>
+                </div>
+                {% set table_row = 0 %}
+                {% for table in tables %}
+                  <div class="form-check">
+                    <input type="checkbox" name="backup[]" value="{{ table }}" id="input-backup-{{ table_row }}" class="form-check-input" checked/>
+                    <label for="input-backup-{{ table_row }}" class="form-check-label">{{ table }}</label>
+                  </div>
+                  {% set table_row = table_row + 1 %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="offset-sm-2 col-sm-10 text-end">
+              <button type="button" id="button-backup" class="btn btn-success"><i class="fa-solid fa-download"></i> {{ button_backup }}</button>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>{{ text_history }}</legend>
+          <div class="alert alert-info"><i class="fa-solid fa-circle-exclamation"></i> {{ text_import }}</div>
+          <div id="history">{{ history }}</div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="view/javascript/backup.js"></script>
+{{ footer }}

@@ -1,0 +1,42 @@
+<form id="form-translation" method="post" data-oc-toggle="ajax" data-oc-load="{{ action }}" data-oc-target="#list">
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th class="text-center" style="width: 1px;"><checkbox-all target="#form-translation"></checkbox-all></th>
+          <th>{{ column_route }}</th>
+          <th>{{ column_key }}</th>
+          <th class="text-center">{{ column_status }}</th>
+          <th>{{ column_date_added }}</th>
+          <th class="text-end">{{ column_action }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if translations %}
+          {% for translation in translations %}
+            <tr>
+              <td class="text-center"><input type="checkbox" name="selected[]" value="{{ translation.translation_id }}" class="form-check-input"/></td>
+              <td>{{ translation.route }}</td>
+              <td>{{ translation.key }}</td>
+              <td class="text-center">{% if translation.status %}
+                  <span class="badge bg-success">{{ text_enabled }}</span>
+                {% else %}
+                  <span class="badge bg-danger">{{ text_disabled }}</span>
+                {% endif %}</td>
+              <td>{{ translation.date_added }}</td>
+              <td class="text-end"><a href="{{ translation.edit }}" title="{{ button_edit }}" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a></td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td class="text-center" colspan="6">{{ text_no_results }}</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <div class="col-sm-6 text-start"><x-pagination href="{{ pagination }}" target="#list" page="{{ page }}" limit="{{ limit }}" total="{{ total }}"></x-pagination></div>
+    <div class="col-sm-6 text-end">{{ results }}</div>
+  </div>
+</form>

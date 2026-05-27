@@ -1,0 +1,90 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-translation" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i></button>
+        <a href="{{ back }}" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_form }}</div>
+      <div class="card-body">
+        <form id="form-translation" action="{{ save }}" method="post" data-oc-toggle="ajax">
+          <fieldset>
+            <legend>{{ text_translation }}</legend>
+            <div class="row mb-3">
+              <label for="input-route" class="col-sm-2 col-form-label">{{ entry_route }}</label>
+              <div class="col-sm-10">
+                <select name="route" id="input-route" class="form-select"></select>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="input-key" class="col-sm-2 col-form-label">{{ entry_key }}</label>
+              <div class="col-sm-10">
+                <select id="input-keys" class="form-select"></select> <input type="text" name="key" value="{{ key }}" placeholder="{{ entry_key }}" id="input-key" class="form-control"/>
+                <div id="error-key" class="invalid-feedback"></div>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
+              <div class="col-sm-10">
+                <x-switch name="status" value="1" checked="{{ status }}" input-id="input-status" input-class="form-switch form-switch-lg"></x-switch>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>{{ text_translation_add }}</legend>
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>{{ entry_store }}</th>
+                    <th>{{ entry_language }}</th>
+                    <th>{{ entry_default }}</th>
+                    <th>{{ entry_value }}</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><select name="store_id" id="input-store" class="form-select">
+                        {% for store in stores %}
+                          <option value="{{ store.store_id }}"{% if store.store_id == store_id %} selected{% endif %}>{{ store.name }}</option>
+                        {% endfor %}
+                      </select></td>
+                    <td><select name="language_id" id="input-language" class="form-select">
+                        {% for language in languages %}
+                          <option value="{{ language.language_id }}"{% if language.language_id == language_id %} selected{% endif %}>{{ language.name }}</option>
+                        {% endfor %}
+                      </select></td>
+                    <td><textarea name="default" rows="5" placeholder="{{ entry_default }}" id="input-default" class="form-control" disabled="disabled">{% if default %}{{ default }}{% endif %}</textarea></td>
+                    <td><textarea name="value" rows="5" placeholder="{{ entry_value }}" id="input-value" class="form-control">{{ value }}</textarea></td>
+                    <td class="text-end"><button type="button" title="{{ button_remove }}" class="btn btn-danger"><i class="fa-solid fa-circle-minus"></i></button></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="4"></td>
+                    <td class="text-end"><button type="button" form="form-translation" title="{{ button_translation_add }}" class="btn btn-primary"><i class="fa-solid fa-plus-circle"></i></button></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </fieldset>
+          <input type="hidden" name="translation_id" value="{{ translation_id }}" id="input-translation-id"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="view/javascript/translation.js"></script>
+{{ footer }}

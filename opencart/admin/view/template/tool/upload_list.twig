@@ -1,0 +1,36 @@
+<form id="form-upload" method="post" data-oc-toggle="ajax" data-oc-load="{{ action }}" data-oc-target="#list">
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th class="text-center" style="width: 1px;"><checkbox-all target="#form-upload"></checkbox-all></th>
+          <th>{{ column_name }}</th>
+          <th>{{ column_code }}</th>
+          <th class="text-end">{{ column_date_added }}</th>
+          <th class="text-end">{{ column_action }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if uploads %}
+          {% for upload in uploads %}
+            <tr>
+              <td class="text-center"><input type="checkbox" name="selected[]" value="{{ upload.upload_id }}" class="form-check-input"/></td>
+              <td>{{ upload.name }}</td>
+              <td>{{ upload.code }}</td>
+              <td class="text-end">{{ upload.date_added }}</td>
+              <td class="text-end"><a href="{{ upload.download }}" title="{{ button_download }}" class="btn btn-info"><i class="fa-solid fa-download"></i></a></td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td class="text-center" colspan="5">{{ text_no_results }}</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <div class="col-sm-6 text-start"><x-pagination href="{{ pagination }}" target="#list" page="{{ page }}" limit="{{ limit }}" total="{{ total }}"></x-pagination></div>
+    <div class="col-sm-6 text-end">{{ results }}</div>
+  </div>
+</form>

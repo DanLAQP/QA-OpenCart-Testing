@@ -1,0 +1,261 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="button" id="button-save" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i></button>
+        <a href="{{ back }}" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card mb-3">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_form }}</div>
+      <div class="card-body">
+        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-3 row-cols-xl-3">
+          <div class="col mb-3">
+            <div class="input-group">
+              <section id="section-order" class="form-control rounded-start" style="min-height: 64px;">
+                <div class="lead"><strong>{{ text_order_id }}</strong>
+                  <br/>
+                  <div id="output-order">{% if order_id %}<a href="{{ order_edit }}" target="_blank">{{ order_id }}</a>{% endif %}</div>
+                </div>
+              </section>
+              <button type="button" data-bs-toggle="modal" data-bs-target="#modal-order" class="btn btn-outline-primary"><i class="fa-solid fa-cog"></i></button>
+            </div>
+          </div>
+          <div class="col mb-3">
+            <div class="input-group">
+              <section id="section-customer" class="form-control rounded-start" style="min-height: 64px;">
+                <div class="lead"><strong>{{ text_customer }}</strong>
+                  <br/>
+                  {% if customer_id %}
+                    <div id="value-customer"><a href="{{ customer_edit }}" target="_blank">{{ firstname }} {{ lastname }}</a></div>
+                  {% else %}
+                    <div id="value-customer">{{ firstname }} {{ lastname }}</div>
+                  {% endif %}
+                </div>
+              </section>
+              <button type="button" data-bs-toggle="modal" data-bs-target="#modal-customer" class="btn btn-outline-primary"><i class="fa-solid fa-cog"></i></button>
+            </div>
+          </div>
+          <div class="col mb-3">
+            <section class="form-control p-0 border rounded" style="min-height: 64px;">
+              <div class="lead p-2"><strong>{{ text_date_added }}</strong>
+                <br/>
+                <div>{{ date_added }}</div>
+              </div>
+            </section>
+          </div>
+        </div>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>{{ column_product }}</th>
+              <th>{{ column_model }}</th>
+              <th class="text-end" style="width: 1px;">{{ column_quantity }}</th>
+            </tr>
+          </thead>
+          <tbody id="return-product">
+            <tr>
+              <td><a href="{{ product_edit }}" target="_blank">{{ product }}</a></td>
+              <td>{{ model }}</td>
+              <td class="text-end">{{ quantity }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2"></td>
+              <td class="text-end"><button type="button" data-bs-toggle="modal" data-bs-target="#modal-product" class="btn btn-primary"><i class="fa-solid fa-plus-circle"></i></button></td>
+            </tr>
+          </tfoot>
+        </table>
+        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-3 row-cols-xl-3">
+          <div class="col mb-3">
+            <form id="form-return-reason" class="form-floating">
+              <select name="return_reason_id" id="input-return-reason" class="form-select">
+                {% for return_reason in return_reasons %}
+                  <option value="{{ return_reason.return_reason_id }}"{% if return_reason.return_reason_id == return_reason_id %} selected{% endif %}>{{ return_reason.name }}</option>
+                {% endfor %}
+              </select>
+              <label for="input-return-reason">{{ entry_return_reason }}</label>
+            </form>
+            <div id="error-return-reason" class="invalid-feedback"></div>
+          </div>
+          <div class="col mb-3">
+            <form id="form-opened" class="form-floating">
+              <select name="opened" id="input-opened" class="form-select">
+                <option value="1"{% if opened %} selected{% endif %}>{{ text_opened }}</option>
+                <option value="0"{% if not opened %} selected{% endif %}>{{ text_unopened }}</option>
+              </select>
+              <label for="input-opened">{{ entry_opened }}</label>
+            </form>
+          </div>
+          <div class="col mb-3">
+            <form id="form-return-action" class="form-floating">
+              <select name="return_action_id" id="input-return-action" class="form-select">
+                {% for return_action in return_actions %}
+                  <option value="{{ return_action.return_action_id }}"{% if return_action.return_action_id == return_action_id %} selected{% endif %}>{{ return_action.name }}</option>
+                {% endfor %}
+              </select>
+              <label for="input-return-action">{{ entry_return_action }}</label>
+            </form>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <form id="form-comment" class="form-floating">
+              <textarea name="comment" rows="10" placeholder="{{ entry_comment }}" id="input-comment" class="form-control" style="min-height: 100px;">{{ comment }}</textarea>
+              <label for="input-comment">{{ entry_comment }}</label>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-list"></i> {{ text_history }}</div>
+      <div class="card-body">
+        <div id="history">{{ history }}</div>
+        <fieldset>
+          <form id="form-history">
+            <legend>{{ text_history_add }}</legend>
+            <div class="row mb-3">
+              <label for="input-return-status" class="col-sm-2 col-form-label">{{ entry_return_status }}</label>
+              <div class="col-sm-10">
+                <select name="return_status_id" id="input-return-status" class="form-select">
+                  {% for return_status in return_statuses %}
+                    <option value="{{ return_status.return_status_id }}"{% if return_status.return_status_id == return_status_id %} selected{% endif %}>{{ return_status.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label class="col-sm-2 col-form-label">{{ entry_notify }}</label>
+              <div class="col-sm-10">
+                <x-switch name="notify" value="1" checked="{{ notify }}" input-id="input-notify" input-class="form-switch form-switch-lg"></x-switch>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="input-history" class="col-sm-2 col-form-label">{{ entry_comment }}</label>
+              <div class="col-sm-10">
+                <textarea name="comment" rows="8" placeholder="{{ entry_comment }}" id="input-history" class="form-control"></textarea>
+              </div>
+            </div>
+            <div class="text-end">
+              <button type="submit" id="button-history" class="btn btn-primary"><i class="fa-solid fa-plus-circle"></i> {{ button_history_add }}</button>
+            </div>
+            <input type="hidden" name="return_id" value="{{ return_id }}" id="input-return-id"/>
+          </form>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="modal-order" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ text_return }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-order" data-oc-target="#section-order">
+          <div class="mb-3">
+            <label for="input-order-id" class="form-label">{{ entry_order_id }}</label>
+            <input type="text" name="order_id" value="{{ order_id }}" placeholder="{{ entry_order_id }}" id="input-order-id" class="form-control"/>
+            <input type="hidden" name="date_ordered" value="{{ date_ordered }}" id="input-date-ordered"/>
+          </div>
+          <div class="text-end">
+            <button type="submit" id="button-order" class="btn btn-primary"><i class="fa-solid fa-check"></i> {{ button_continue }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="modal-customer" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ text_customer }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-customer" data-oc-target="#section-customer">
+          <div class="mb-3">
+            <label for="input-customer" class="form-label">{{ entry_customer }}</label>
+            <input type="text" value="{{ firstname }} {{ lastname }}" placeholder="{{ entry_customer }}" id="input-customer" data-oc-target="autocomplete-customer" class="form-control" autocomplete="off"/>
+            <input type="hidden" name="customer_id" value="{{ customer_id }}" id="input-customer-id"/>
+            <ul id="autocomplete-customer" class="dropdown-menu"></ul>
+          </div>
+          <div class="mb-3">
+            <label for="input-firstname" class="form-label">{{ entry_firstname }}</label>
+            <input type="text" name="firstname" value="{{ firstname }}" placeholder="{{ entry_firstname }}" id="input-firstname" class="form-control" required/>
+            <div id="error-firstname" class="invalid-feedback"></div>
+          </div>
+          <div class="mb-3">
+            <label for="input-lastname" class="form-label">{{ entry_lastname }}</label>
+            <input type="text" name="lastname" value="{{ lastname }}" placeholder="{{ entry_lastname }}" id="input-lastname" class="form-control" required/>
+            <div id="error-lastname" class="invalid-feedback"></div>
+          </div>
+          <div class="mb-3">
+            <label for="input-email" class="form-label">{{ entry_email }}</label>
+            <input type="text" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control" required/>
+            <div id="error-email" class="invalid-feedback"></div>
+          </div>
+          <div class="mb-3">
+            <label for="input-telephone" class="form-label">{{ entry_telephone }}</label>
+            <input type="text" name="telephone" value="{{ telephone }}" placeholder="{{ entry_telephone }}" id="input-telephone" class="form-control"{% if config_telephone_required %} required{% endif %}/>
+            <div id="error-telephone" class="invalid-feedback"></div>
+          </div>
+          <div class="text-end">
+            <button type="submit" id="button-customer" class="btn btn-primary"><i class="fa-solid fa-check"></i> {{ button_continue }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="modal-product" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ text_product }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-product" data-oc-target="#section-product">
+          <div class="mb-3">
+            <label for="input-return" class="form-label">{{ entry_product }}</label>
+            <select name="product_id" id="input-return" class="form-select" required>
+              <option value="{{ product_id }}">{{ product }}</option>
+            </select>
+            <input type="hidden" name="product" value="{{ product }}" id="input-product"/>
+            <div id="error-product" class="invalid-feedback"></div>
+          </div>
+          <div class="mb-3">
+            <label for="input-model" class="form-label">{{ entry_model }}</label>
+            <input type="text" name="model" value="{{ model }}" placeholder="{{ entry_model }}" id="input-model" class="form-control" required/>
+            <div id="error-model" class="invalid-feedback"></div>
+          </div>
+          <div class="mb-3">
+            <label for="input-quantity" class="form-label">{{ entry_quantity }}</label>
+            <input type="text" name="quantity" value="{{ quantity }}" placeholder="{{ entry_quantity }}" id="input-quantity" class="form-control"/>
+            <div id="error-quantity" class="invalid-feedback"></div>
+          </div>
+          <div class="text-end">
+            <button type="submit" id="button-product" class="btn btn-primary"><i class="fa-solid fa-check"></i> {{ button_continue }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="view/javascript/return.js"></script>
+{{ footer }}
