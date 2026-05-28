@@ -164,6 +164,66 @@
                 </div>
             </div>
         </section>
+
+        <!-- Presentación del producto -->
+        <section class="card section-spacing">
+            <h2><span class="step-num">1.</span>¿Qué es OpenCart?</h2>
+            <div class="product-presentation">
+                <p><strong>OpenCart</strong> es un sistema de gestión de contenidos (CMS) de código abierto diseñado específicamente para el comercio electrónico. Proporciona una base profesional y fiable para construir una tienda online exitosa.</p>
+                <p>Está desarrollado con el lenguaje de programación PHP y bases de datos MySQL/MariaDB. Su arquitectura sigue el patrón de diseño <strong>MVC-L (Model-View-Controller-Language)</strong>, una variante del MVC tradicional que separa de forma estricta la lógica de negocio, la interfaz de usuario y los archivos de traducción para la internacionalización.</p>
+                
+                <div class="history-box">
+                    <h3><i class="fa-solid fa-clock-rotate-left"></i> Breve Reseña Histórica</h3>
+                    <p>OpenCart fue creada originalmente en 1998 por Christopher G. Mann como una aplicación de comercio electrónico mucho más sencilla. La primera versión pública fue lanzada el 11 de mayo de 1999 y estaba escrita en el lenguaje Perl. Esta primera versión fue abandonada y retomada en 2009 por el desarrollador Daniel Kerr al ver potencial en la aplicación decidió reescribir OpenCart por completo desde cero cambiando el lenguaje obsoleto de Perl por PHP.</p>
+                </div>
+                
+                <p class="highlight-text"><i class="fa-solid fa-star"></i> OpenCart permite la capacidad de gestionar múltiples tiendas desde un único panel de administración, mercado de extensiones y pasarela de pagos integradas.</p>
+            </div>
+        </section>
+
+        <section class="card section-spacing">
+            <h2><span class="step-num">2.</span> Justificación de Elección</h2>
+            <p class="table-intro">La selección de OpenCart como el Sistema Bajo Prueba se fundamenta bajo el cumplimiento técnico de los criterios y exigencias de la rúbrica de evaluación:</p>
+            
+            <div class="justification-grid">
+                <div class="justification-item">
+                    <h3><i class="fa-solid fa-file-shield text-blue"></i> Compatibilidad de Licencia</h3>
+                    <p>OpenCart está distribuido bajo la licencia <strong>GNU General Public License (GPLv3)</strong>. Esta licencia de código abierto cumple con el requisito de permitir el <em>forking</em>, la modificación del código fuente y el uso libre sin ningún tipo de restricciones académicas o legales, permitiendo la inyección de las suites de pruebas sin inconvenientes.</p>
+                </div>
+
+                <div class="justification-item">
+                    <h3><i class="fa-solid fa-shop text-blue"></i> Dominio Comercial Altamente Transaccional (PyMEs)</h3>
+                    <p>El dominio de la plataforma corresponde al <strong>e-commerce</strong>, enfocado directamente en soluciones empresariales para pequeñas y medianas empresas (PyMEs). Desde la perspectiva de QA, este dominio posee flujos de ejecución críticos como la gestión de sesiones, carrito de compras, cálculo automatizado de impuestos y pasarelas de pago.</p>
+                </div>
+
+                <div class="justification-item">
+                    <h3><i class="fa-solid fa-code text-blue"></i> Stack Tecnológico Vigente en la Industria</h3>
+                    <p>El producto utiliza un stack basado en <strong>PHP y MySQL/MariaDB</strong>, bajo el patrón arquitectónico <strong>MVC-L</strong>. OpenCart permite implementar pruebas unitarias (Unit Testing) efectivas sin la necesidad de levantar dependencias complejas de la interfaz gráfica, utilizando herramientas como <strong>PHPUnit</strong>.</p>
+                </div>
+
+                <div class="justification-item">
+                    <h3><i class="fa-solid fa-cubes text-blue"></i> Complejidad Arquitectónica y Volumetría Adecuada (KLOC)</h3>
+                    <p>OpenCart clasifica como un proyecto de complejidad mediana ideal para un entorno académico controlado. Cuenta con un rango de líneas de código fuente entre las <strong>25 KLOC y 45 KLOC</strong> cumpliendo con el estándar requerido. Además posee de más de 5 módulos core claramente definidos:</p>
+                    <ul class="list-features mini-list">
+                        <li>Módulo de Catálogo y Productos</li>
+                        <li>Módulo de Clientes y Autenticación</li>
+                        <li>Módulo de Carrito de Compras y Checkout</li>
+                        <li>Módulo de Extensiones y Pasarelas de Pago</li>
+                        <li>Panel de Administración y Reportes</li>
+                    </ul>
+                </div>
+
+                <div class="justification-item">
+                    <h3><i class="fa-solid fa-server text-blue"></i> Infraestructura DevOps Adaptable (CI/CD)</h3>
+                    <p>El proyecto permite una integración nativa con herramientas como <strong>Docker y Docker Compose</strong> para empaquetar el servidor web (Apache/Nginx), el motor PHP y la base de datos MySQL.</p>
+                </div>
+
+                <div class="justification-item">
+                    <h3><i class="fa-solid fa-vial-circle-check text-blue"></i> Idoneidad para Pruebas de Regresión</h3>
+                    <p>Al ser un software maduro pero en constante actualización, OpenCart es idóneo para simular escenarios reales donde la introducción de nuevas extensiones o parches requiere un conjunto robusto de <strong>pruebas de regresión</strong> para asegurar que las características núcleo no se corrompan a lo largo de los diferentes Sprints.</p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
