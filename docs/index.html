@@ -2,32 +2,173 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>QA OpenCart Testing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Pruebas Unitarias - OpenCart</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cloudflare.com">
 </head>
 <body>
 
-    <h1>Proyecto QA OpenCart</h1>
+    <header class="header">
+        <div class="logo">
+            <!-- Ícono FontAwesome -->
+            <i class="fa-solid fa-square-check"></i>
+            <!-- Logo oficial desde URL -->
+            <img src="https://www.opencart.com/application/view/image/icon/opencart-logo.png" 
+                alt="Logo OpenCart" 
+                class="logo-img">
+            <!-- Texto del proyecto -->
+            <span>Proyecto QA OpenCart</span>
+            
+            
+        </div>
+        <div><img src="OIP.webp" alt="logo" style="width:50px; height:auto;"></div>
+    </header>
 
-    <p>
-        Proyecto académico enfocado en pruebas de software
-        sobre OpenCart utilizando metodologías ágiles y CI/CD.
-    </p>
+    <main class="container">
+        
+        <!-- Nueva sección de integrantes -->
+        <section class="integrantes">
+            <h2>Integrantes</h2>
+            <ul>
+            <li>Yucra Machacca, Mariana Grethel </li>
+            <li>Suasaca Pacompia, Alvaro Gustavo</li>
+            <li>Quispe Bejar, Garlet Analy</li>
+            <li>Valdiviezo Tovar, Alexander </li>
+            <li>Aguero Guerreros, Luis Daniel </li>
+            
+            </ul>
+        </section>
 
-    <h2>Integrantes</h2>
+        <!-- Título Principal -->
+        <section class="main-title">
+            <h2>1. Plan de Pruebas Unitarias</h2>
+            <p class="subtitle">Aseguramiento de calidad y estabilidad del núcleo del sistema</p>
+        </section>
 
-    <ul>
-        <li>Luis Daniel Aguero Guerreros</li>
-        <li>...</li>
-    </ul>
+        <!-- Dos Columnas: Objetivo y Alcance -->
+        <div class="grid-2col">
+            <div class="card">
+                <h2><span class="step-num">1.1</span> Objetivo</h2>
+                <p>Asegurar la calidad y el correcto funcionamiento a nivel de código de los componentes individuales de OpenCart. Se validará que las funciones y métodos de los módulos seleccionados retornen los valores esperados ante diferentes escenarios (datos válidos, inválidos y casos extremos).</p>
+            </div>
 
-    <h2>Tecnologías</h2>
+            <div class="card">
+                <h2><span class="step-num">1.2</span> Alcance</h2>
+                <p>El plan cubrirá exclusivamente la capa lógica (controladores y modelos) de los siguientes 6 módulos críticos del sistema:</p>
+                <ul class="list-features">
+                    <li><strong>Login y Registro:</strong> Autenticación, validación de contraseñas, sesiones.</li>
+                    <li><strong>Carrito de Compras:</strong> Cálculo de subtotales, impuestos, agregar/eliminar items.</li>
+                    <li><strong>Checkout / Pago:</strong> Procesamiento de datos de facturación y envío.</li>
+                    <li><strong>Catálogo y Búsqueda:</strong> Filtros de productos, paginación, cálculo de precios con descuento.</li>
+                    <li><strong>Gestión de Inventario:</strong> Actualización de stock tras una compra.</li>
+                    <li><strong>Sistema de Reseñas:</strong> Validación de longitud de comentarios y puntuación.</li>
+                </ul>
+            </div>
+        </div>
 
-    <ul>
-        <li>PHP</li>
-        <li>MySQL</li>
-        <li>Docker</li>
-        <li>GitHub Actions</li>
-    </ul>
+        <!-- Herramientas y Entorno -->
+        <section class="card section-spacing">
+            <h2><span class="step-num">1.3</span> Herramientas y Entorno</h2>
+            <div class="tools-grid">
+                <div class="tool-item">
+                    <i class="fa-brands fa-php tool-icon"></i>
+                    <div>
+                        <h3>Framework de Pruebas</h3>
+                        <p>PHPUnit (Estándar para proyectos en PHP como OpenCart).</p>
+                    </div>
+                </div>
+                <div class="tool-item">
+                    <i class="fa-solid fa-kanban tool-icon"></i>
+                    <div>
+                        <h3>Gestión de Tareas</h3>
+                        <p>GitHub Projects (Tablero Kanban del repositorio).</p>
+                    </div>
+                </div>
+                <div class="tool-item">
+                    <i class="fa-brands fa-github tool-icon"></i>
+                    <div>
+                        <h3>Control de Versiones</h3>
+                        <p>Repositorio centralizado en GitHub.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Asignación de Equipo -->
+        <section class="card section-spacing">
+            <h2><span class="step-num">1.4</span> Asignación del Equipo</h2>
+            <p class="table-intro">Distribución equitativa para la redacción, codificación y ejecución de pruebas:</p>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Módulo Asignado</th>
+                            <th>Responsable</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1. Login y Registro</td>
+                            <td><strong>Mariana</strong></td>
+                            <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
+                        </tr>
+                        <tr>
+                            <td>2. Carrito de Compras</td>
+                            <td><strong>Alvaro</strong></td>
+                            <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
+                        </tr>
+                        <tr>
+                            <td>3. Checkout / Pago</td>
+                            <td><strong>Garlet</strong></td>
+                            <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
+                        </tr>
+                        <tr>
+                            <td>4. Catálogo y Búsqueda</td>
+                            <td><strong>Alexander</strong></td>
+                            <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
+                        </tr>
+                        <tr>
+                            <td>5. Gestión de Inventario</td>
+                            <td><strong>Daniel</strong></td>
+                            <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
+                        </tr>
+                        <tr>
+                            <td>6. Sistema de Reseñas</td>
+                            <td><span class="unassigned">Por asignar</span></td>
+                            <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Criterios de Éxito -->
+        <section class="card section-spacing success-zone">
+            <h2><span class="step-num">1.5</span> Criterios de Éxito</h2>
+            <p>Una prueba unitaria se considerará finalizada cuando cumpla los siguientes requisitos:</p>
+            <div class="success-grid">
+                <div class="success-item">
+                    <i class="fa-solid fa-route success-icon"></i>
+                    <p>El código de la prueba cubre rutas de éxito y rutas de error.</p>
+                </div>
+                <div class="success-item">
+                    <i class="fa-solid fa-circle-check success-icon green"></i>
+                    <p>La ejecución en PHPUnit retorna un estado verde (Aprobado).</p>
+                </div>
+                <div class="success-item">
+                    <i class="fa-regular fa-circle-dot success-icon"></i>
+                    <p>Está registrada como una Issue cerrada en GitHub Projects.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 OpenCart QA Team Apis Melifera.</p>
+    </footer>
 
 </body>
 </html>
