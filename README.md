@@ -1,6 +1,6 @@
 # QA-OpenCart-Testing
 
-Proyecto de **Calidad de Software** enfocado en el diseño, implementación y ejecución de **pruebas unitarias** sobre módulos críticos de OpenCart utilizando **PHPUnit**, **GitHub** y **GitHub Projects**.
+Proyecto de **Pruebas de Software** enfocado en el diseño, implementación y ejecución de **pruebas unitarias** sobre módulos críticos de OpenCart utilizando **PHPUnit**, **GitHub** y **GitHub Projects**.
 
 ---
 
