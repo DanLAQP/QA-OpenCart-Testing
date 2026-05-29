@@ -42,7 +42,7 @@ Los módulos seleccionados para el análisis son:
 
 ---
 
-## 🛠 Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 - PHP
 - PHPUnit
