@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pruebas Unitarias - QA OpenCart</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="unitarias.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <i class="fa-solid fa-square-check"></i>
+            <img src="https://www.opencart.com/application/view/image/icon/opencart-logo.png" alt="Logo OpenCart" class="logo-img">
+            <span>Proyecto QA OpenCart</span>
+        </div>
+
+        <nav class="top-nav">
+            <ul>
+                
+                <li><a href="index.html">Home</a></li>
+                <li><a href="unitarias.html" class="active">Pruebas Unitarias</a></li>
+                <li><a href="#">Pruebas de Integración</a></li>
+                <li><a href="#">Pruebas de Composición</a></li>
+                <li><a href="#">Pruebas de Sistema</a></li>
+            </ul>
+        </nav>
+
+        <div><img src="OIP.webp" alt="logo" class="logo-local"></div>
+    </header>
+
+    <main class="container">
+        
+        <div class="main-title">
+            <h1>Plan de Pruebas Unitarias</h1>
+        </div>
+
+        <div class="grid-2col section-spacing">
+            <div class="card clean-card">
+                <h2><span class="step-num">1.1</span> Objetivo</h2>
+                <p>Asegurar la calidad y el correcto funcionamiento a nivel de código de los componentes individuales de OpenCart. Se validará que las funciones y métodos de los módulos seleccionados retornen los valores esperados ante diferentes escenarios (datos válidos, inválidos y casos extremos).</p>
+            </div>
+
+            <div class="card clean-card">
+                <h2><span class="step-num">1.2</span> Alcance</h2>
+                <p>El plan cubrirá exclusivamente la capa lógica (controladores y modelos) de los siguientes 6 módulos críticos del sistema:</p>
+                <ul class="list-features">
+                    <li><strong>Clientes y Autenticación:</strong> Lógica de validación de registro, verificación de formato de credenciales, recuperación de contraseñas y sanitización de perfiles.</li>
+                    <li><strong>Catálogo y Búsqueda:</strong> Lógica de ordenamiento de productos, algoritmos de filtrado por características, sanitización de la barra de búsqueda y validación de reglas para reseñas.</li>
+                    <li><strong>Carrito y Flujo de Checkout:</strong> Cálculos matemáticos del carrito (agregar/eliminar), sumatorias de subtotales, y aplicación lógica de cupones de descuento.</li>
+                    <li><strong>Ventas e Inventario:</strong> Funciones de validación de estados de pedido (Pendiente, Completado, Rechazado) y la lógica matemática para el descuento de stock.</li>
+                    <li><strong>Localización, Impuestos y Configuración:</strong>  Lógica de conversión de múltiples monedas, aplicación de reglas por zonas geográficas y validación de formatos de configuración.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-spacing">
+            <h2><span class="step-num">1.3</span> Herramientas y Entorno</h2>
+            <div class="tools-grid-clean">
+                <div class="tool-box">
+                    <div class="fake-checkbox"></div>
+                    <div>
+                        <h3>Framework de Pruebas</h3>
+                        <p>PHPUnit (Estándar para proyectos en PHP como OpenCart).</p>
+                    </div>
+                </div>
+                <div class="tool-box">
+                    <div class="fake-checkbox"></div>
+                    <div>
+                        <h3>Gestión de Tareas</h3>
+                        <p>GitHub Projects (Tablero Kanban del repositorio).</p>
+                    </div>
+                </div>
+                <div class="tool-box">
+                    <div class="fake-checkbox"></div>
+                    <div>
+                        <h3>Control de Versiones</h3>
+                        <p>Repositorio centralizado en GitHub.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-spacing">
+            <h2><span class="step-num">1.4</span> Asignación del Equipo</h2>
+            <p class="text-muted">Distribución equitativa para la redacción, codificación y ejecución de pruebas:</p>
+            
+            <div class="clean-table-container">
+                <table class="clean-table">
+                    <thead>
+                        <tr>
+                            <th>MÓDULO ASIGNADO</th>
+                            <th>RESPONSABLE</th>
+                            <th>ESTADO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1. Clientes y Autenticación</td>
+                            <td><strong>Mariana</strong></td>
+                            <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
+                        </tr>
+                        <tr>
+                            <td>2. Catálogo y Búsqueda</td>
+                            <td><strong>Alvaro</strong></td>
+                            <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
+                        </tr>
+                        <tr>
+                            <td>3. Carrito y Flujo de Checkout</td>
+                            <td><strong>Garlet</strong></td>
+                            <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
+                        </tr>
+                        <tr>
+                            <td>4. Ventas e Inventario</td>
+                            <td><strong>Alexander</strong></td>
+                            <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
+                        </tr>
+                        <tr>
+                            <td>5. Localización, Impuestos y Configuración:</td>
+                            <td><strong>Daniel</strong></td>
+                            <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section-spacing">
+            <h2><span class="step-num">1.5</span> Criterios de Éxito</h2>
+            <div class="tools-grid-clean">
+                <div class="tool-box">
+                    <i class="fa-solid fa-code text-blue"></i>
+                    <div>
+                        <p>El código cubre rutas de éxito y error.</p>
+                    </div>
+                </div>
+                <div class="tool-box">
+                    <i class="fa-solid fa-check-circle text-green"></i>
+                    <div>
+                        <p>PHPUnit retorna estado verde (Aprobado).</p>
+                    </div>
+                </div>
+                <div class="tool-box">
+                    <i class="fa-solid fa-folder-closed text-blue"></i>
+                    <div>
+                        <p>Issue cerrada en GitHub Projects.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</body>
+</html>

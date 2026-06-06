@@ -1,0 +1,136 @@
+/* ==========================================
+   Estilos Específicos: Pruebas Unitarias
+   ========================================== */
+
+/* Colores utilitarios */
+.text-blue { color: #2563eb; }
+.text-green { color: #10b981; }
+.text-muted { color: #64748b; }
+.text-italic { font-style: italic; }
+
+/* Títulos y numeración azul */
+.step-num {
+    color: #2563eb;
+    margin-right: 0.3rem;
+}
+
+/* Tarjetas limpias (Objetivo y Alcance) */
+.clean-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: none;
+    padding: 2rem;
+}
+
+.clean-card h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+/* Lista con viñetas azules redondas */
+.blue-bullet-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 1rem;
+}
+
+.blue-bullet-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+    color: #334155;
+    line-height: 1.5;
+}
+
+.blue-bullet-list li::before {
+    content: "•";
+    color: #2563eb;
+    font-size: 1.5rem;
+    position: absolute;
+    left: 0;
+    top: -4px;
+}
+
+/* Grid de Herramientas (Cajas con checkbox) */
+.tools-grid-clean {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.tool-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: #ffffff;
+}
+
+.fake-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #cbd5e1;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.tool-box h3 {
+    font-size: 1.05rem;
+    color: #0f172a;
+    margin-bottom: 0.4rem;
+}
+
+.tool-box p {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Tabla limpia de asignaciones */
+.clean-table-container {
+    overflow-x: auto;
+    margin-top: 1.5rem;
+    background: #ffffff;
+}
+
+.clean-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.clean-table th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #475569;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+}
+
+.clean-table td {
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+    font-size: 0.95rem;
+}
+
+/* Botón estado Pendiente (Amarillo pastel) */
+.badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.badge-warning {
+    background-color: #fef3c7;
+    color: #d97706;
+}
