@@ -37,7 +37,7 @@ Los módulos seleccionados para el análisis son:
 | Alvaro | Carrito de Compras |
 | Garlet | Checkout / Pago |
 | Alexander | Catálogo y Búsqueda |
-| Aguero | Gestión de Inventario |
+| Daniel | Gestión de Inventario |
 | Por asignar | Sistema de Reseñas |
 
 ---
