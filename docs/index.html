@@ -20,8 +20,17 @@
             <!-- Texto del proyecto -->
             <span>Proyecto QA OpenCart</span>
             
-            
         </div>
+            <nav class="top-nav">
+            <ul>
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="unitarias.html">Pruebas Unitarias</a></li>
+                <li><a href="#">Pruebas de Integración</a></li>
+                <li><a href="#">Pruebas de Composición</a></li>
+                <li><a href="#">Pruebas de Sistema</a></li>
+            </ul>
+        </nav>
+
         <div><img src="OIP.webp" alt="logo" style="width:50px; height:auto;"></div>
     </header>
 
@@ -57,13 +66,11 @@
                 <h2><span class="step-num">1.2</span> Alcance</h2>
                 <p>El plan cubrirá exclusivamente la capa lógica (controladores y modelos) de los siguientes 6 módulos críticos del sistema:</p>
                 <ul class="list-features">
-                    <li><strong>Login y Registro:</strong> Autenticación, validación de contraseñas, sesiones.</li>
-                    <li><strong>Carrito de Compras:</strong> Cálculo de subtotales, impuestos, agregar/eliminar items.</li>
-                    <li><strong>Checkout / Pago:</strong> Procesamiento de datos de facturación y envío.</li>
-                    <li><strong>Catálogo y Búsqueda:</strong> Filtros de productos, paginación, cálculo de precios con descuento.</li>
-                    <li><strong>Gestión de Inventario:</strong> Actualización de stock tras una compra.</li>
-                    <li><strong>Sistema de Reseñas:</strong> Validación de longitud de comentarios y puntuación.</li>
-                </ul>
+                    <li><strong>Clientes y Autenticación:</strong> Lógica de validación de registro, verificación de formato de credenciales, recuperación de contraseñas y sanitización de perfiles.</li>
+                    <li><strong>Catálogo y Búsqueda:</strong> Lógica de ordenamiento de productos, algoritmos de filtrado por características, sanitización de la barra de búsqueda y validación de reglas para reseñas.</li>
+                    <li><strong>Carrito y Flujo de Checkout:</strong> Cálculos matemáticos del carrito (agregar/eliminar), sumatorias de subtotales, y aplicación lógica de cupones de descuento.</li>
+                    <li><strong>Ventas e Inventario:</strong> Funciones de validación de estados de pedido (Pendiente, Completado, Rechazado) y la lógica matemática para el descuento de stock.</li>
+                    <li><strong>Localización, Impuestos y Configuración:</strong>  Lógica de conversión de múltiples monedas, aplicación de reglas por zonas geográficas y validación de formatos de configuración.</li>
             </div>
         </div>
 
@@ -111,33 +118,28 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1. Login y Registro</td>
+                            <td>1. Clientes y Autenticación</td>
                             <td><strong>Mariana</strong></td>
                             <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
                         </tr>
                         <tr>
-                            <td>2. Carrito de Compras</td>
+                            <td>2. Catálogo y Búsqueda</td>
                             <td><strong>Alvaro</strong></td>
                             <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
                         </tr>
                         <tr>
-                            <td>3. Checkout / Pago</td>
+                            <td>3. Carrito y Flujo de Checkout</td>
                             <td><strong>Garlet</strong></td>
                             <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
                         </tr>
                         <tr>
-                            <td>4. Catálogo y Búsqueda</td>
+                            <td>4. Ventas e Inventario</td>
                             <td><strong>Alexander</strong></td>
                             <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
                         </tr>
                         <tr>
-                            <td>5. Gestión de Inventario</td>
+                            <td>5. Localización, Impuestos y Configuración:</td>
                             <td><strong>Daniel</strong></td>
-                            <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
-                        </tr>
-                        <tr>
-                            <td>6. Sistema de Reseñas</td>
-                            <td><span class="unassigned">Por asignar</span></td>
                             <td><span class="status-badge badge-pending"><i class="fa-solid fa-clock"></i> Pendiente</span></td>
                         </tr>
                     </tbody>
