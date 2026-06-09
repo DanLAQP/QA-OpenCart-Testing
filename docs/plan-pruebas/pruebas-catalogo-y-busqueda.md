@@ -1,4 +1,4 @@
-# README de Pruebas: Catálogo y Búsqueda
+# Pruebas: Catálogo y Búsqueda
 
 ## Descripción
 
@@ -58,15 +58,4 @@ Se presentan en formato tabular para facilitar su uso en documentación QA, prue
 
 ---
 
-## Resumen por componente
-
-| Componente | Cantidad de pruebas |
-|---|---:|
-| Navegación por categorías | 8 |
-| Búsqueda | 10 |
-| Ordenamiento y paginación | 6 |
-| Detalle de producto | 6 |
-| **Total** | **30** |
-
----
 
