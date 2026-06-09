@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Este documento contiene una propuesta de **36 casos de prueba** para el módulo **Login y Registro**, diseñados con las técnicas de:
+Este documento contiene una propuesta de **36 casos de prueba** para el módulo **Login**, diseñados con las técnicas de:
 
 - **PE**: Partición de Equivalencia
 - **AVL**: Análisis de Valores Límite
