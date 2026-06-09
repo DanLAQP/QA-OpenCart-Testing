@@ -70,13 +70,3 @@ Se presentan en formato tabular para facilitar su uso en documentación QA, prue
 
 ---
 
-## Observaciones
-
-- Estas pruebas pueden adaptarse como **casos de prueba funcionales**, **pruebas unitarias de controlador/modelo** o **pruebas de aceptación**, según el nivel de implementación.
-- Si lo necesitas, el siguiente paso recomendable es convertir esta tabla en una versión con columnas adicionales de:
-  - precondiciones
-  - pasos
-  - datos de prueba
-  - resultado obtenido
-  - estado
-- También puede transformarse a formato para **Excel**, **CSV** o **matriz de QA**.
