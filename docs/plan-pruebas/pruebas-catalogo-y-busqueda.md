@@ -1,4 +1,4 @@
-# README de Pruebas: Catálogo y Búsqueda
+# Pruebas: Catálogo y Búsqueda
 
 ## Descripción
 
