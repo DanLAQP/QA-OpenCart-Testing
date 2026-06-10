@@ -795,4 +795,5 @@ class LoginAndRegisterTest extends BaseTestCase {
     public function testLoginAPIPerformance(): void {
         $this->assertTrue(true);
     }
+
 }

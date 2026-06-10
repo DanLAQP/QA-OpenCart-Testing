@@ -632,4 +632,97 @@ class CatalogTest extends BaseTestCase {
         $inList = $this->catalog->isInWishlist(1, 1);
         $this->assertFalse($inList);
     }
+
+    // ========== Cobertura Adicional - CatalogManager (15 tests) ==========
+
+    public function testGetProductsMultipleCalls(): void {
+        $products1 = $this->catalog->getProducts();
+        $products2 = $this->catalog->getProducts();
+        $this->assertEquals($products1, $products2);
+    }
+
+    public function testSearchProductsSubstring(): void {
+        $results = $this->catalog->searchProducts('top');
+        $this->assertIsArray($results);
+    }
+
+    public function testSearchProductsCaseFold(): void {
+        $results1 = $this->catalog->searchProducts('laptop');
+        $results2 = $this->catalog->searchProducts('LAPTOP');
+        $this->assertIsArray($results1);
+        $this->assertIsArray($results2);
+    }
+
+    public function testGetCategoriesConsistency(): void {
+        $categories1 = $this->catalog->getCategories();
+        $categories2 = $this->catalog->getCategories();
+        $this->assertEquals(count($categories1), count($categories2));
+    }
+
+    public function testFilterByPriceBoundary(): void {
+        $products = $this->catalog->getProducts();
+        $filtered = $this->catalog->filterByPrice($products, 25, 25);
+        foreach ($filtered as $p) {
+            $this->assertEquals(25, $p['price']);
+        }
+    }
+
+    public function testSortProductsPreservesAll(): void {
+        $products = $this->catalog->getProducts();
+        $sorted = $this->catalog->sortProducts($products, 'price');
+        $this->assertEquals(count($products), count($sorted));
+    }
+
+    public function testPaginateFirstPage(): void {
+        $items = range(1, 100);
+        $page1 = $this->catalog->paginate($items, 1, 10);
+        $this->assertCount(10, $page1);
+        $this->assertEquals(1, $page1[0]);
+    }
+
+    public function testPaginateMiddlePage(): void {
+        $items = range(1, 100);
+        $page3 = $this->catalog->paginate($items, 3, 10);
+        $this->assertCount(10, $page3);
+        $this->assertEquals(21, $page3[0]);
+    }
+
+    public function testGetPriceNoProduct(): void {
+        $price = $this->catalog->getPrice(999);
+        $this->assertEquals(0, $price);
+    }
+
+    public function testGetDiscountedPriceZeroDiscount(): void {
+        $price = $this->catalog->getDiscountedPrice(1, 0);
+        $this->assertEquals(1000, $price);
+    }
+
+    public function testGetCategoryProductsMultiple(): void {
+        $products1 = $this->catalog->getCategoryProducts(1);
+        $products2 = $this->catalog->getCategoryProducts(2);
+        $this->assertIsArray($products1);
+        $this->assertIsArray($products2);
+    }
+
+    public function testSearchProductsEmpty(): void {
+        $results = $this->catalog->searchProducts('XYZNONEXISTENT');
+        $this->assertIsArray($results);
+    }
+
+    public function testWishlistOperations(): void {
+        $add = $this->catalog->addToWishlist(1, 1);
+        $remove = $this->catalog->removeFromWishlist(1, 1);
+        $this->assertTrue($add && $remove);
+    }
+
+    public function testWishlistCheck(): void {
+        $inList = $this->catalog->isInWishlist(999, 999);
+        $this->assertFalse($inList);
+    }
+
+    public function testFilterByPriceWithDecimal(): void {
+        $products = $this->catalog->getProducts();
+        $filtered = $this->catalog->filterByPrice($products, 10.5, 100.99);
+        $this->assertIsArray($filtered);
+    }
 }

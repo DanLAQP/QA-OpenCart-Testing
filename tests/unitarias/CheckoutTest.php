@@ -520,4 +520,164 @@ class CheckoutTest extends BaseTestCase {
         $this->assertFalse($result['success']);
         $this->assertArrayHasKey('errors', $result);
     }
+
+    // ========== Cobertura Adicional - CheckoutManager (20 tests) ==========
+
+    public function testInitCheckoutMultipleItems(): void {
+        $cart = [
+            'items' => [
+                ['price' => 100],
+                ['price' => 200],
+                ['price' => 300]
+            ]
+        ];
+        $result = $this->checkout->initCheckout($cart, true);
+        $this->assertTrue($result['status']);
+    }
+
+    public function testIsCartValidWithNegativePrice(): void {
+        $cart = ['items' => [['price' => -100]]];
+        $result = $this->checkout->isCartValid($cart);
+        $this->assertFalse($result);
+    }
+
+    public function testValidateStockMultipleItems(): void {
+        $items = [
+            ['stock' => 10],
+            ['stock' => 5],
+            ['stock' => 0]
+        ];
+        $result = $this->checkout->validateStock($items, false);
+        $this->assertFalse($result['valid']);
+    }
+
+    public function testValidateMinimumQuantityZero(): void {
+        $result = $this->checkout->validateMinimumQuantity(0, 5);
+        $this->assertFalse($result['valid']);
+    }
+
+    public function testValidateMinimumQuantityEqual(): void {
+        $result = $this->checkout->validateMinimumQuantity(5, 5);
+        $this->assertTrue($result['valid']);
+    }
+
+    public function testValidateBillingAddressPartialFields(): void {
+        $address = [
+            'firstname' => 'Juan',
+            'lastname' => '',
+            'city' => 'Lima',
+            'address' => 'Calle 1'
+        ];
+        $result = $this->checkout->validateBillingAddress($address);
+        $this->assertFalse($result['valid']);
+    }
+
+    public function testValidateShippingAddressAllFields(): void {
+        $address = [
+            'firstname' => 'Juan',
+            'lastname' => 'Pérez',
+            'city' => 'Lima',
+            'address' => 'Calle 1',
+            'country' => 'PE',
+            'zipcode' => '15001'
+        ];
+        $result = $this->checkout->validateShippingAddress($address);
+        $this->assertTrue($result['valid']);
+    }
+
+    public function testShippingMethodsWithAddress(): void {
+        $this->session->data['shipping_address_id'] = 1;
+        $methods = $this->checkout->getShippingMethods();
+        $this->assertNotEmpty($methods);
+    }
+
+    public function testSetShippingMethodMultiple(): void {
+        $available = [
+            ['id' => 'flat'],
+            ['id' => 'standard'],
+            ['id' => 'express']
+        ];
+        $result1 = $this->checkout->setShippingMethod('flat', $available);
+        $result2 = $this->checkout->setShippingMethod('express', $available);
+        $this->assertTrue($result1 && $result2);
+    }
+
+    public function testPaymentMethodsWithShipping(): void {
+        $this->session->data['shipping_method'] = 'flat';
+        $methods = $this->checkout->getPaymentMethods();
+        $this->assertNotEmpty($methods);
+    }
+
+    public function testSetPaymentMethodMultiple(): void {
+        $available = [
+            ['id' => 'tarjeta'],
+            ['id' => 'transferencia'],
+            ['id' => 'paypal']
+        ];
+        $result1 = $this->checkout->setPaymentMethod('tarjeta', $available);
+        $result2 = $this->checkout->setPaymentMethod('paypal', $available);
+        $this->assertTrue($result1 && $result2);
+    }
+
+    public function testAddCommentLong(): void {
+        $longComment = str_repeat('A', 500);
+        $result = $this->checkout->addComment($longComment);
+        $this->assertTrue($result);
+    }
+
+    public function testAddCommentSpecialChars(): void {
+        $result = $this->checkout->addComment("Dejar en portería, preferiblemente entre 9-17h. ¡Gracias!");
+        $this->assertTrue($result);
+    }
+
+    public function testAcceptTermsMultipleTimes(): void {
+        $result1 = $this->checkout->acceptTerms();
+        $result2 = $this->checkout->acceptTerms();
+        $this->assertTrue($result1 && $result2);
+    }
+
+    public function testCalculateTotalWithZeroShipping(): void {
+        $total = $this->checkout->calculateTotal(100, 0, 18);
+        $this->assertEquals(118.00, $total);
+    }
+
+    public function testCalculateTotalWithZeroTax(): void {
+        $total = $this->checkout->calculateTotal(100, 10, 0);
+        $this->assertEquals(110.00, $total);
+    }
+
+    public function testGenerateOrderWithValidState(): void {
+        $this->session->data['shipping_method'] = 'flat';
+        $this->session->data['payment_method'] = 'card';
+        $result = $this->checkout->generateOrder();
+        $this->assertTrue($result['success']);
+        $this->assertArrayHasKey('order_id', $result);
+    }
+
+    public function testGetOrderStatus(): void {
+        $status = $this->checkout->getOrderStatus(123);
+        $this->assertIsString($status);
+        $this->assertNotEmpty($status);
+    }
+
+    public function testClearCheckoutCleanup(): void {
+        $this->session->data['billing_address_id'] = 1;
+        $this->session->data['shipping_method'] = 'flat';
+        $this->session->data['payment_method'] = 'card';
+        $result = $this->checkout->clearCheckout();
+        $this->assertTrue($result);
+        $this->assertFalse(isset($this->session->data['billing_address_id']));
+    }
+
+    public function testInitCheckoutAuthenticatedUser(): void {
+        $cart = ['items' => [['price' => 100]]];
+        $result = $this->checkout->initCheckout($cart, true);
+        $this->assertTrue($result['authenticated']);
+    }
+
+    public function testInitCheckoutGuestUser(): void {
+        $cart = ['items' => [['price' => 100]]];
+        $result = $this->checkout->initCheckout($cart, false);
+        $this->assertFalse($result['authenticated']);
+    }
 }
