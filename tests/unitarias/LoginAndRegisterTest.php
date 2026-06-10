@@ -796,4 +796,151 @@ class LoginAndRegisterTest extends BaseTestCase {
         $this->assertTrue(true);
     }
 
+    // ========== Tests Adicionales AuthenticationManager (20 tests) ==========
+
+    public function testLoginWithValidCredentialsDatabase(): void {
+        $customerData = [
+            'customer_id' => 1,
+            'email' => 'user@test.com',
+            'password' => password_hash('password123', PASSWORD_BCRYPT),
+            'status' => 1
+        ];
+        $mockQuery = $this->createMockQueryResult($customerData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->auth->login('user@test.com', 'password123');
+        $this->assertTrue($result['success']);
+    }
+
+    public function testLoginWithInvalidPassword(): void {
+        $customerData = [
+            'customer_id' => 1,
+            'email' => 'user@test.com',
+            'password' => password_hash('password123', PASSWORD_BCRYPT),
+            'status' => 1
+        ];
+        $mockQuery = $this->createMockQueryResult($customerData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->auth->login('user@test.com', 'wrongpassword');
+        $this->assertFalse($result['success']);
+    }
+
+    public function testLoginWithInactiveAccount(): void {
+        $customerData = [
+            'customer_id' => 1,
+            'email' => 'user@test.com',
+            'password' => password_hash('password123', PASSWORD_BCRYPT),
+            'status' => 0
+        ];
+        $mockQuery = $this->createMockQueryResult($customerData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->auth->login('user@test.com', 'password123');
+        $this->assertFalse($result['success']);
+    }
+
+    public function testValidateLoginInputWithEmptyEmail(): void {
+        $result = $this->auth->validateLoginInput('', 'password');
+        $this->assertFalse($result['valid']);
+    }
+
+    public function testValidateLoginInputWithEmptyPassword(): void {
+        $result = $this->auth->validateLoginInput('user@test.com', '');
+        $this->assertFalse($result['valid']);
+    }
+
+    public function testValidateLoginInputWithBothEmpty(): void {
+        $result = $this->auth->validateLoginInput('', '');
+        $this->assertFalse($result['valid']);
+    }
+
+    public function testValidateLoginInputWithValidData(): void {
+        $result = $this->auth->validateLoginInput('user@test.com', 'password');
+        $this->assertTrue($result['valid']);
+    }
+
+    public function testGenerateLoginTokenFormat(): void {
+        $token = $this->auth->generateLoginToken();
+        $this->assertIsString($token);
+        $this->assertGreaterThan(0, strlen($token));
+    }
+
+    public function testValidateTokenWithNullSessionToken(): void {
+        $result = $this->auth->validateToken(null, 'token');
+        $this->assertFalse($result);
+    }
+
+    public function testValidateTokenWithMatchingTokens(): void {
+        $token = 'test_token_12345';
+        $result = $this->auth->validateToken($token, $token);
+        $this->assertTrue($result);
+    }
+
+    public function testValidateTokenWithDifferentTokens(): void {
+        $result = $this->auth->validateToken('token1', 'token2');
+        $this->assertFalse($result);
+    }
+
+    public function testRecordFailedAttemptCreatesEntry(): void {
+        $result = $this->auth->recordFailedAttempt('user@test.com', '192.168.1.1');
+        $this->assertTrue($result);
+    }
+
+    public function testIsLoginAttemptBlockedWithFewAttempts(): void {
+        $this->auth->recordFailedAttempt('user@test.com', '192.168.1.1');
+        $blocked = $this->auth->isLoginAttemptBlocked('user@test.com', '192.168.1.1', 5);
+        $this->assertFalse($blocked);
+    }
+
+    public function testDeleteLoginAttemptsRemovesEntries(): void {
+        $this->auth->recordFailedAttempt('user@test.com', '192.168.1.1');
+        $result = $this->auth->deleteLoginAttempts('user@test.com');
+        $this->assertTrue($result);
+    }
+
+    public function testIsEmailExistsWithValidEmail(): void {
+        $mockQuery = $this->createMockQueryResult(['count' => 1], 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $exists = $this->auth->isEmailExists('existing@test.com');
+        $this->assertTrue($exists);
+    }
+
+    public function testIsEmailExistsWithNewEmail(): void {
+        $mockQuery = $this->createMockQueryResult(['count' => 0], 0);
+        $this->db->setQueryResult($mockQuery);
+
+        $exists = $this->auth->isEmailExists('new@test.com');
+        $this->assertFalse($exists);
+    }
+
+    public function testValidatePasswordMinimum(): void {
+        $result = $this->auth->validatePassword('pass');
+        $this->assertTrue($result['valid']);
+    }
+
+    public function testValidatePasswordTooShort(): void {
+        $result = $this->auth->validatePassword('p');
+        $this->assertFalse($result['valid']);
+    }
+
+    public function testRegisterNewUser(): void {
+        $this->db->setQueryResult(true);
+
+        $result = $this->auth->register([
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'john@test.com',
+            'password' => 'Pass1234!',
+            'agree' => true
+        ]);
+        $this->assertTrue($result['success']);
+    }
+
+    public function testGetRegistrationFormHasToken(): void {
+        $form = $this->auth->getRegistrationForm();
+        $this->assertArrayHasKey('token', $form);
+        $this->assertNotEmpty($form['token']);
+    }
 }

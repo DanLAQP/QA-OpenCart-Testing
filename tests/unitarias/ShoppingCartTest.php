@@ -494,65 +494,59 @@ class ShoppingCartTest extends BaseTestCase {
 
     // ========== Validaciones Avanzadas (15 tests) ==========
 
-    public function testValidateProductCompatibility(): void {
-        $this->assertTrue(true);
+    public function testCartMultipleProductOperations(): void {
+        $this->cart->setProducts([
+            ['product_id' => 1, 'quantity' => 1, 'price' => 100, 'name' => 'P1', 'image' => 'img1.jpg'],
+            ['product_id' => 2, 'quantity' => 2, 'price' => 200, 'name' => 'P2', 'image' => 'img2.jpg']
+        ]);
+        $products = $this->cart->getProducts();
+        $this->assertCount(2, $products);
     }
 
-    public function testValidateProductBundles(): void {
-        $this->assertTrue(true);
+    public function testCartCalculateTotals(): void {
+        $this->cart->setProducts([
+            ['product_id' => 1, 'quantity' => 2, 'price' => 100, 'name' => 'P1', 'image' => 'img1.jpg'],
+            ['product_id' => 2, 'quantity' => 3, 'price' => 50, 'name' => 'P2', 'image' => 'img2.jpg']
+        ]);
+        $totals = $this->cart->calculateTotals();
+        $this->assertIsArray($totals);
     }
 
-    public function testValidateProductRestrictions(): void {
-        $this->assertTrue(true);
+    public function testCheckoutAvailability(): void {
+        $this->cart->setProducts([
+            ['product_id' => 1, 'quantity' => 1, 'price' => 100, 'name' => 'P1', 'image' => 'img1.jpg']
+        ]);
+        $available = $this->cart->isCheckoutAvailable();
+        $this->assertTrue(is_bool($available));
     }
 
-    public function testValidateItemConditions(): void {
-        $this->assertTrue(true);
+    public function testCartItemCountTwo(): void {
+        $this->cart->setProducts([
+            ['product_id' => 1, 'quantity' => 1, 'price' => 100, 'name' => 'P1', 'image' => 'img1.jpg'],
+            ['product_id' => 2, 'quantity' => 1, 'price' => 200, 'name' => 'P2', 'image' => 'img2.jpg']
+        ]);
+        $count = $this->cart->getCartItemCount();
+        $this->assertEquals(2, $count);
     }
 
-    public function testValidatePromotionEligibility(): void {
-        $this->assertTrue(true);
+    public function testCartGetSubtotalMultiple(): void {
+        $this->cart->setProducts([
+            ['product_id' => 1, 'quantity' => 2, 'price' => 100, 'name' => 'P1', 'image' => 'img1.jpg'],
+            ['product_id' => 2, 'quantity' => 1, 'price' => 50, 'name' => 'P2', 'image' => 'img2.jpg']
+        ]);
+        $subtotal = $this->cart->getSubtotal();
+        $this->assertEquals(250, $subtotal);
     }
 
-    public function testValidateVolumeDiscounts(): void {
-        $this->assertTrue(true);
+    public function testCartClearingBehavior(): void {
+        $this->cart->setProducts([
+            ['product_id' => 1, 'quantity' => 1, 'price' => 100, 'name' => 'P1', 'image' => 'img1.jpg']
+        ]);
+        $this->cart->clear();
+        $products = $this->cart->getProducts();
+        $this->assertEmpty($products);
     }
 
-    public function testValidateTierPricing(): void {
-        $this->assertTrue(true);
-    }
-
-    public function testValidateCouponCombinations(): void {
-        $this->assertTrue(true);
-    }
-
-    public function testValidateShippingRestrictions(): void {
-        $this->assertTrue(true);
-    }
-
-    public function testValidateGiftMessages(): void {
-        $this->assertTrue(true);
-    }
-
-    public function testValidateGiftWrapping(): void {
-        $this->assertTrue(true);
-    }
-
-    public function testValidatePreOrderProducts(): void {
-        $this->assertTrue(true);
-    }
-
-    public function testValidateBackOrderProducts(): void {
-        $this->assertTrue(true);
-    }
-
-    public function testValidateDownloadableProducts(): void {
-        $this->assertTrue(true);
-    }
-
-    public function testValidateVirtualProducts(): void {
-        $this->assertTrue(true);
-    }
 
     // ========== Optimización (10 tests) ==========
 

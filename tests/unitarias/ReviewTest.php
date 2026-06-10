@@ -424,4 +424,93 @@ class ReviewTest extends BaseTestCase {
         $this->assertEquals('Juan', $detail['author']);
         $this->assertEquals(5, $detail['rating']);
     }
+
+    // ========== Cobertura Adicional - ReviewManager (15 tests) ==========
+
+    public function testCreateReviewBoundaryRating1(): void {
+        $result = $this->reviews->createReview(1, 'Test', 1, 'Mínimo');
+        $this->assertTrue($result['success']);
+    }
+
+    public function testCreateReviewBoundaryRating5(): void {
+        $result = $this->reviews->createReview(1, 'Test', 5, 'Máximo');
+        $this->assertTrue($result['success']);
+    }
+
+    public function testCreateReviewRatingBelowMin(): void {
+        $result = $this->reviews->createReview(1, 'Test', 0, 'Invalid');
+        $this->assertFalse($result['success']);
+    }
+
+    public function testCreateReviewRatingAboveMax(): void {
+        $result = $this->reviews->createReview(1, 'Test', 6, 'Invalid');
+        $this->assertFalse($result['success']);
+    }
+
+    public function testApproveReviewMultiple(): void {
+        $r1 = $this->reviews->createReview(1, 'A', 5, 'Good');
+        $r2 = $this->reviews->createReview(1, 'B', 4, 'Great');
+        $a1 = $this->reviews->approveReview($r1['review_id']);
+        $a2 = $this->reviews->approveReview($r2['review_id']);
+        $this->assertTrue($a1 && $a2);
+    }
+
+    public function testRejectReviewMultiple(): void {
+        $r1 = $this->reviews->createReview(1, 'A', 5, 'Good');
+        $r2 = $this->reviews->createReview(1, 'B', 4, 'Great');
+        $rej1 = $this->reviews->rejectReview($r1['review_id']);
+        $rej2 = $this->reviews->rejectReview($r2['review_id']);
+        $this->assertTrue($rej1 && $rej2);
+    }
+
+    public function testDeleteReviewMultiple(): void {
+        $r1 = $this->reviews->createReview(1, 'A', 5, 'Good');
+        if ($r1['success']) {
+            $d1 = $this->reviews->deleteReview($r1['review_id']);
+            $this->assertTrue($d1);
+        }
+    }
+
+    public function testUpdateReviewStatusPending(): void {
+        $result = $this->reviews->createReview(1, 'Test', 5, 'Good');
+        $updated = $this->reviews->updateReviewStatus($result['review_id'], 'pending');
+        $this->assertTrue($updated);
+    }
+
+    public function testUpdateReviewStatusApproved(): void {
+        $result = $this->reviews->createReview(1, 'Test', 5, 'Good');
+        $updated = $this->reviews->updateReviewStatus($result['review_id'], 'approved');
+        $this->assertTrue($updated);
+    }
+
+    public function testUpdateReviewStatusRejected(): void {
+        $result = $this->reviews->createReview(1, 'Test', 5, 'Good');
+        $updated = $this->reviews->updateReviewStatus($result['review_id'], 'rejected');
+        $this->assertTrue($updated);
+    }
+
+    public function testUpdateReviewStatusInvalidStatus(): void {
+        $result = $this->reviews->createReview(1, 'Test', 5, 'Good');
+        $updated = $this->reviews->updateReviewStatus($result['review_id'], 'invalid_status');
+        $this->assertFalse($updated);
+    }
+
+    public function testUpdateReviewStatusNonExistent(): void {
+        $updated = $this->reviews->updateReviewStatus(999, 'approved');
+        $this->assertFalse($updated);
+    }
+
+    public function testGetReviewDetailNonExistent(): void {
+        $detail = $this->reviews->getReviewDetail(999);
+        $this->assertEmpty($detail);
+    }
+
+    public function testPaginateReviewsPage1(): void {
+        for ($i = 0; $i < 20; $i++) {
+            $this->reviews->createReview(1, "Author$i", rand(1, 5), "Comment$i");
+        }
+        $reviews = $this->reviews->getReviewsByProduct(1);
+        $page1 = $this->reviews->paginateReviews($reviews, 1, 5);
+        $this->assertLessThanOrEqual(5, count($page1));
+    }
 }
