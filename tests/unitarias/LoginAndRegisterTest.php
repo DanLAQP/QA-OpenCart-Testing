@@ -943,4 +943,192 @@ class LoginAndRegisterTest extends BaseTestCase {
         $this->assertArrayHasKey('token', $form);
         $this->assertNotEmpty($form['token']);
     }
+
+    // ========== Cobertura Final - Todos los Caminos (25 tests) ==========
+
+    public function testRegisterWithInvalidFirstName(): void {
+        $result = $this->auth->register([
+            'firstname' => '',
+            'lastname' => 'Doe',
+            'email' => 'test@test.com',
+            'password' => 'Pass1234!',
+            'agree' => true
+        ]);
+        $this->assertFalse($result['success']);
+        $this->assertArrayHasKey('firstname', $result['errors']);
+    }
+
+    public function testRegisterWithInvalidLastName(): void {
+        $result = $this->auth->register([
+            'firstname' => 'John',
+            'lastname' => '',
+            'email' => 'test@test.com',
+            'password' => 'Pass1234!',
+            'agree' => true
+        ]);
+        $this->assertFalse($result['success']);
+        $this->assertArrayHasKey('lastname', $result['errors']);
+    }
+
+    public function testRegisterWithInvalidEmail(): void {
+        $result = $this->auth->register([
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'invalid',
+            'password' => 'Pass1234!',
+            'agree' => true
+        ]);
+        $this->assertFalse($result['success']);
+        $this->assertArrayHasKey('email', $result['errors']);
+    }
+
+    public function testRegisterWithDuplicateEmail(): void {
+        $mockQuery = $this->createMockQueryResult(['count' => 1], 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->auth->register([
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'existing@test.com',
+            'password' => 'Pass1234!',
+            'agree' => true
+        ]);
+        $this->assertFalse($result['success']);
+        $this->assertArrayHasKey('email', $result['errors']);
+    }
+
+    public function testRegisterWithInvalidPassword(): void {
+        $result = $this->auth->register([
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'test@test.com',
+            'password' => 'a',
+            'agree' => true
+        ]);
+        $this->assertFalse($result['success']);
+        $this->assertArrayHasKey('password', $result['errors']);
+    }
+
+    public function testRegisterWithoutAgree(): void {
+        $result = $this->auth->register([
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'test@test.com',
+            'password' => 'Pass1234!',
+            'agree' => false
+        ]);
+        $this->assertTrue(is_array($result));
+    }
+
+    public function testRegisterMissingFirstName(): void {
+        $result = $this->auth->register([
+            'lastname' => 'Doe',
+            'email' => 'test@test.com',
+            'password' => 'Pass1234!',
+            'agree' => true
+        ]);
+        $this->assertFalse($result['success']);
+    }
+
+    public function testRegisterMissingLastName(): void {
+        $result = $this->auth->register([
+            'firstname' => 'John',
+            'email' => 'test@test.com',
+            'password' => 'Pass1234!',
+            'agree' => true
+        ]);
+        $this->assertFalse($result['success']);
+    }
+
+    public function testRegisterMissingEmail(): void {
+        $result = $this->auth->register([
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'password' => 'Pass1234!',
+            'agree' => true
+        ]);
+        $this->assertFalse($result['success']);
+    }
+
+    public function testRegisterMissingPassword(): void {
+        $result = $this->auth->register([
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'test@test.com',
+            'agree' => true
+        ]);
+        $this->assertFalse($result['success']);
+    }
+
+    public function testValidateTokenHashEquals(): void {
+        $token = 'abc123def456';
+        $result = $this->auth->validateToken($token, $token);
+        $this->assertTrue($result);
+    }
+
+    public function testValidateTokenDifferentLength(): void {
+        $result = $this->auth->validateToken('short', 'thisisalongertoken');
+        $this->assertFalse($result);
+    }
+
+    public function testValidateTokenBothEmpty(): void {
+        $result = $this->auth->validateToken('', '');
+        $this->assertFalse($result);
+    }
+
+    public function testSendWelcomeEmailReturnsTrue(): void {
+        $result = $this->auth->sendWelcomeEmail('test@test.com');
+        $this->assertTrue($result);
+    }
+
+    public function testSendVerificationEmailReturnsTrue(): void {
+        $result = $this->auth->sendVerificationEmail('test@test.com');
+        $this->assertTrue($result);
+    }
+
+    public function testSendPasswordResetEmailReturnsTrue(): void {
+        $result = $this->auth->sendPasswordResetEmail('test@test.com', 'token123');
+        $this->assertTrue($result);
+    }
+
+    public function testSendLoginAlertEmailReturnsTrue(): void {
+        $result = $this->auth->sendLoginAlertEmail('test@test.com');
+        $this->assertTrue($result);
+    }
+
+    public function testSendSuspiciousActivityEmailReturnsTrue(): void {
+        $result = $this->auth->sendSuspiciousActivityEmail('test@test.com');
+        $this->assertTrue($result);
+    }
+
+    public function testValidateFirstNameBoundaryMin(): void {
+        $result = $this->auth->validateFirstName('A');
+        $this->assertTrue($result['valid']);
+    }
+
+    public function testValidateFirstNameBoundaryMax(): void {
+        $result = $this->auth->validateFirstName(str_repeat('A', 32));
+        $this->assertTrue($result['valid']);
+    }
+
+    public function testValidateLastNameBoundaryMin(): void {
+        $result = $this->auth->validateLastName('A');
+        $this->assertTrue($result['valid']);
+    }
+
+    public function testValidateLastNameBoundaryMax(): void {
+        $result = $this->auth->validateLastName(str_repeat('A', 32));
+        $this->assertTrue($result['valid']);
+    }
+
+    public function testUpdatePasswordWithTokenShortToken(): void {
+        $result = $this->auth->updatePasswordWithToken('short', 'NewPass123');
+        $this->assertFalse($result['success']);
+    }
+
+    public function testUpdatePasswordWithTokenValidToken(): void {
+        $longToken = str_repeat('a', 32);
+        $result = $this->auth->updatePasswordWithToken($longToken, 'NewPass123');
+        $this->assertTrue($result['success']);
+    }
 }
