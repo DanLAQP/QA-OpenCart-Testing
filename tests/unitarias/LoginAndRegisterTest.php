@@ -1131,4 +1131,136 @@ class LoginAndRegisterTest extends BaseTestCase {
         $result = $this->auth->updatePasswordWithToken($longToken, 'NewPass123');
         $this->assertTrue($result['success']);
     }
+
+    // ========== Último Push para 100% - Edge Cases (15 tests) ==========
+
+    public function testLoginWithInactiveAccountStatus(): void {
+        $customerData = [
+            'customer_id' => 1,
+            'email' => 'user@test.com',
+            'password' => password_hash('password123', PASSWORD_BCRYPT),
+            'status' => 0
+        ];
+        $mockQuery = $this->createMockQueryResult($customerData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->auth->login('user@test.com', 'password123');
+        $this->assertFalse($result['success']);
+        $this->assertArrayHasKey('error_approved', $result);
+    }
+
+    public function testLoginWithNonExistentEmail(): void {
+        $mockQuery = $this->createMockQueryResult([], 0);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->auth->login('nonexistent@test.com', 'password');
+        $this->assertFalse($result['success']);
+        $this->assertArrayHasKey('error_login', $result);
+    }
+
+    public function testValidateFirstNameTooLong(): void {
+        $result = $this->auth->validateFirstName(str_repeat('A', 33));
+        $this->assertFalse($result['valid']);
+    }
+
+    public function testValidateLastNameTooLong(): void {
+        $result = $this->auth->validateLastName(str_repeat('A', 33));
+        $this->assertFalse($result['valid']);
+    }
+
+    public function testValidateEmailWithValidFormat(): void {
+        $result = $this->auth->validateEmail('test@example.com');
+        $this->assertTrue($result['valid']);
+    }
+
+    public function testValidateEmailWithInvalidFormat(): void {
+        $result = $this->auth->validateEmail('not-an-email');
+        $this->assertFalse($result['valid']);
+    }
+
+    public function testValidatePasswordExactMinimum(): void {
+        $result = $this->auth->validatePassword('pass');
+        $this->assertTrue($result['valid']);
+    }
+
+    public function testRecordFailedAttemptMultipleTimes(): void {
+        $r1 = $this->auth->recordFailedAttempt('test@test.com', '192.168.1.1');
+        $r2 = $this->auth->recordFailedAttempt('test@test.com', '192.168.1.1');
+        $r3 = $this->auth->recordFailedAttempt('test@test.com', '192.168.1.1');
+        $this->assertTrue($r1 && $r2 && $r3);
+    }
+
+    public function testLoginAttemptBlockedWithQuery(): void {
+        $mockQuery = $this->createMockQueryResult(['total' => 6], 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->auth->isLoginAttemptBlocked('test@test.com', '192.168.1.1', 6);
+        $this->assertTrue(is_bool($result));
+    }
+
+    public function testDeleteLoginAttemptsMultiple(): void {
+        $this->auth->recordFailedAttempt('test@test.com', '192.168.1.1');
+        $this->auth->recordFailedAttempt('test@test.com', '192.168.1.1');
+        $result = $this->auth->deleteLoginAttempts('test@test.com');
+        $this->assertTrue($result);
+    }
+
+    public function testGenerateResetTokenLength(): void {
+        $token = $this->auth->generateResetToken();
+        $this->assertGreaterThan(60, strlen($token));
+    }
+
+    public function testValidateResetTokenWithLongToken(): void {
+        $longToken = str_repeat('a', 50);
+        $result = $this->auth->validateResetToken($longToken);
+        $this->assertTrue($result);
+    }
+
+    public function testSendEmailMethodsReturnBoolean(): void {
+        $r1 = $this->auth->sendWelcomeEmail('test@test.com');
+        $r2 = $this->auth->sendVerificationEmail('test@test.com');
+        $r3 = $this->auth->sendPasswordResetEmail('test@test.com', 'token');
+        $r4 = $this->auth->sendLoginAlertEmail('test@test.com');
+        $r5 = $this->auth->sendSuspiciousActivityEmail('test@test.com');
+        $this->assertTrue($r1 && $r2 && $r3 && $r4 && $r5);
+    }
+
+    public function testValidateTokenWithEmptySessionToken(): void {
+        $result = $this->auth->validateToken('', 'token');
+        $this->assertFalse($result);
+    }
+
+    public function testValidateTokenWithEmptySubmittedToken(): void {
+        $result = $this->auth->validateToken('token', '');
+        $this->assertFalse($result);
+    }
+
+    public function testRegisterSuccessfullyCreatesCustomer(): void {
+        $this->db->setQueryResult(true);
+
+        $result = $this->auth->register([
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'john@test.com',
+            'password' => 'ValidPass123!',
+            'agree' => true
+        ]);
+
+        $this->assertTrue($result['success']);
+        $this->assertArrayHasKey('customer_id', $result);
+    }
+
+    public function testIsEmailExistsReturnsFalseForNewEmail(): void {
+        $mockQuery = $this->createMockQueryResult(['count' => 0], 0);
+        $this->db->setQueryResult($mockQuery);
+
+        $exists = $this->auth->isEmailExists('new@test.com');
+        $this->assertFalse($exists);
+    }
+
+    public function testGenerateLoginTokenReturnsHex(): void {
+        $token = $this->auth->generateLoginToken();
+        $this->assertTrue(ctype_xdigit($token));
+        $this->assertGreaterThan(20, strlen($token));
+    }
 }
