@@ -1062,4 +1062,201 @@ class InventoryManagerTest extends BaseTestCase {
         $this->assertTrue($result);
     }
 
+    // ========== Cobertura 100% - Líneas Faltantes (20 tests) ==========
+
+    public function testValidateProductQuantityWithAllowOutOfStock(): void {
+        $productData = [
+            'product_id' => 1,
+            'quantity' => 0,
+            'status' => 1,
+            'minimum' => 1,
+            'date_available' => date('Y-m-d')
+        ];
+        $mockQuery = $this->createMockQueryResult($productData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $this->config->set('config_allow_out_of_stock', true);
+        $result = $this->inventoryManager->validateProductQuantity(1, 5);
+        $this->assertTrue($result['valid']);
+    }
+
+    public function testIsProductAvailableWithFutureDate(): void {
+        $futureDate = date('Y-m-d', strtotime('+1 day'));
+        $productData = [
+            'product_id' => 1,
+            'quantity' => 10,
+            'status' => 1,
+            'minimum' => 1,
+            'date_available' => $futureDate
+        ];
+        $mockQuery = $this->createMockQueryResult($productData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->inventoryManager->isProductAvailable(1);
+        $this->assertFalse($result);
+    }
+
+    public function testIsProductAvailableWithCurrentDate(): void {
+        $currentDate = date('Y-m-d');
+        $productData = [
+            'product_id' => 1,
+            'quantity' => 10,
+            'status' => 1,
+            'minimum' => 1,
+            'date_available' => $currentDate
+        ];
+        $mockQuery = $this->createMockQueryResult($productData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->inventoryManager->isProductAvailable(1);
+        $this->assertTrue($result);
+    }
+
+    public function testIsProductAvailableWithoutStock(): void {
+        $productData = [
+            'product_id' => 1,
+            'quantity' => 0,
+            'status' => 1,
+            'minimum' => 1,
+            'date_available' => date('Y-m-d')
+        ];
+        $mockQuery = $this->createMockQueryResult($productData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $this->config->set('config_allow_out_of_stock', false);
+        $result = $this->inventoryManager->isProductAvailable(1);
+        $this->assertFalse($result);
+    }
+
+    public function testValidateOptionQuantityNotFound(): void {
+        $mockQuery = $this->createMockQueryResult([], 0);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->inventoryManager->validateOptionQuantity(1, 1, 5);
+        $this->assertFalse($result['valid']);
+    }
+
+    public function testValidateOptionQuantityInsufficient(): void {
+        $optionData = ['quantity' => 2];
+        $mockQuery = $this->createMockQueryResult($optionData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->inventoryManager->validateOptionQuantity(1, 1, 5);
+        $this->assertFalse($result['valid']);
+    }
+
+    public function testValidateOptionQuantityValid(): void {
+        $optionData = ['quantity' => 10];
+        $mockQuery = $this->createMockQueryResult($optionData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->inventoryManager->validateOptionQuantity(1, 1, 5);
+        $this->assertTrue($result['valid']);
+    }
+
+    public function testIsProductMasterTrue(): void {
+        $variantData = ['count' => 3];
+        $mockQuery = $this->createMockQueryResult($variantData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->inventoryManager->isProductMaster(1);
+        $this->assertTrue($result);
+    }
+
+    public function testIsProductMasterFalse(): void {
+        $variantData = ['count' => 0];
+        $mockQuery = $this->createMockQueryResult($variantData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->inventoryManager->isProductMaster(1);
+        $this->assertFalse($result);
+    }
+
+    public function testGetProductVariantsWithData(): void {
+        $variantsData = [
+            ['id' => 1, 'master_id' => 1, 'name' => 'Variant 1'],
+            ['id' => 2, 'master_id' => 1, 'name' => 'Variant 2']
+        ];
+        $mockQuery = $this->createMockQueryResult($variantsData, 2);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->inventoryManager->getProductVariants(1);
+        $this->assertIsArray($result);
+    }
+
+    public function testGetProductVariantsEmpty(): void {
+        $mockQuery = $this->createMockQueryResult([], 0);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->inventoryManager->getProductVariants(1);
+        $this->assertIsArray($result);
+    }
+
+    public function testValidateCheckoutQuantityWithProvidedStock(): void {
+        $result = $this->inventoryManager->validateCheckoutQuantity(1, 5, 10);
+        $this->assertTrue(is_array($result));
+    }
+
+    public function testValidateCheckoutQuantityExceedsProvidedStock(): void {
+        $result = $this->inventoryManager->validateCheckoutQuantity(1, 15, 10);
+        $this->assertFalse($result['valid']);
+    }
+
+    public function testValidateCheckoutQuantityWithNullStock(): void {
+        $result = $this->inventoryManager->validateCheckoutQuantity(1, 5, null);
+        $this->assertTrue(is_array($result));
+    }
+
+    public function testValidateProductMinimumMetExactly(): void {
+        $productData = [
+            'product_id' => 1,
+            'quantity' => 10,
+            'status' => 1,
+            'minimum' => 5,
+            'date_available' => date('Y-m-d')
+        ];
+        $mockQuery = $this->createMockQueryResult($productData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $result = $this->inventoryManager->validateProductMinimum(1, 5);
+        $this->assertTrue($result['valid']);
+    }
+
+    public function testGetStockStatusUnknown(): void {
+        $mockQuery = $this->createMockQueryResult([], 0);
+        $this->db->setQueryResult($mockQuery);
+
+        $status = $this->inventoryManager->getStockStatus(1);
+        $this->assertEquals('unknown', $status);
+    }
+
+    public function testGetStockStatusInStock(): void {
+        $productData = [
+            'product_id' => 1,
+            'quantity' => 10,
+            'status' => 1,
+            'minimum' => 1,
+            'date_available' => date('Y-m-d')
+        ];
+        $mockQuery = $this->createMockQueryResult($productData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $status = $this->inventoryManager->getStockStatus(1);
+        $this->assertEquals('in_stock', $status);
+    }
+
+    public function testGetStockStatusOutOfStock(): void {
+        $productData = [
+            'product_id' => 1,
+            'quantity' => 0,
+            'status' => 1,
+            'minimum' => 1,
+            'date_available' => date('Y-m-d')
+        ];
+        $mockQuery = $this->createMockQueryResult($productData, 1);
+        $this->db->setQueryResult($mockQuery);
+
+        $status = $this->inventoryManager->getStockStatus(1);
+        $this->assertEquals('out_of_stock', $status);
+    }
 }
