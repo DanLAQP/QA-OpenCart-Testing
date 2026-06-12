@@ -1,4 +1,4 @@
-# README de Pruebas: Sistema de Reseñas
+# Pruebas: Sistema de Reseñas
 
 ## Descripción
 
