@@ -1,0 +1,71 @@
+name: OpenCart CI
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  opencart-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: opencart
+          MYSQL_USER: opencart
+          MYSQL_PASSWORD: opencart
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: mysqli, gd, curl, mbstring, zip, openssl
+          tools: composer
+
+      - name: Verificar versión
+        run: |
+          php -v
+          composer --version
+
+      - name: Instalar dependencias
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Esperar MySQL
+        run: |
+          until mysql -h 127.0.0.1 -uopencart -popencart -e "SELECT 1" > /dev/null 2>&1; do
+            echo "Esperando MySQL..."
+            sleep 3
+          done
+
+      - name: Preparar config
+        run: |
+          cp upload/config-dist.php upload/config.php || true
+          cp upload/admin/config-dist.php upload/admin/config.php || true
+
+      - name: Configurar conexión a BD
+        run: |
+          sed -i "s/localhost/127.0.0.1/g" upload/config.php || true
+          sed -i "s/localhost/127.0.0.1/g" upload/admin/config.php || true
+
+      - name: Levantar servidor PHP
+        run: |
+          php -S 127.0.0.1:8000 -t upload > server.log 2>&1 &
+          sleep 5
+
+      - name: Probar homepage
+        run: curl -I http://127.0.0.1:8000
