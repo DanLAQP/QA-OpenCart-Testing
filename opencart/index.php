@@ -1,9 +1,10 @@
 <?php
 // Version
-define('VERSION', '4.2.0.0');
+define('VERSION', '4.1.0.4');
 
-// Added dirname function so the system will work from command line.
-if (is_file(dirname(__FILE__)  . '/config.php')) {
+// Configuration
+if (is_file('config.php')) {
+	/** @phpstan-ignore-next-line requireOnce.fileNotFound */
 	require_once('config.php');
 }
 
