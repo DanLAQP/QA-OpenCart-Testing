@@ -149,10 +149,3 @@ Se presentan en formato tabular para facilitar su uso en documentación QA, prue
 | **Total** | **80** |
 
 ---
-
-## Observaciones
-
-- Este documento cubre **80 casos de prueba** basados en los 38 requisitos funcionales del módulo.
-- Los casos incluyen validaciones de stock, opciones, variantes, API y administración.
-- Las pruebas están diseñadas para validar tanto el flujo de usuario como las operaciones administrativas.
-- Se recomienda ejecutar estos casos en combinación con pruebas de integración para validar la coherencia de datos entre catálogo, carrito y checkout.
