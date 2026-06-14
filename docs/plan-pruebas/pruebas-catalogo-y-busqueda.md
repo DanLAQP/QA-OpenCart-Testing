@@ -154,22 +154,3 @@ Se presentan en formato tabular para facilitar su uso en documentación QA, vali
 | **Total** | **127** |
 
 ---
-
-## Resumen por componente
-
-| Componente | Cantidad de pruebas |
-|---|---:|
-| Navegación por catálogo | 25 |
-| Búsqueda de productos | 25 |
-| Detalle de producto | 38 |
-| Comparación de productos | 12 |
-| Marcas / fabricantes | 15 |
-| Reglas de visualización | 12 |
-| **Total** | **127** |
-
----
-
-## Observaciones
-
-- Se conservaron las **100 pruebas** existentes del README y se añadieron nuevas pruebas para cubrir **Marcas/Fabricantes** y **Reglas de visualización de productos**.
-- El documento ahora cubre todos los bloques funcionales del módulo **Catálogo y Búsqueda**.
