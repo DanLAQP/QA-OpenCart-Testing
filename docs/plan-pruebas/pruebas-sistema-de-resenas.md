@@ -92,22 +92,3 @@ Se presentan en formato tabular para facilitar su uso en documentación QA, vali
 | **Total** | **65** |
 
 ---
-
-## Resumen por componente
-
-| Componente | Cantidad de pruebas |
-|---|---:|
-| Publicación y visualización en frontend | 18 |
-| Validación y envío | 32 |
-| Persistencia y publicación | 6 |
-| Integración con catálogo y producto | 5 |
-| Gestión administrativa | 4 |
-| **Total** | **65** |
-
----
-
-## Observaciones
-
-- Estas pruebas cubren funcionalmente el módulo **Sistema de Reseñas**.
-- Pueden reutilizarse como base para QA manual, automatización, pruebas académicas o matriz de validación.
-- Si lo necesitas, el siguiente paso es convertirlas a una tabla con precondiciones, pasos, datos de prueba, resultado obtenido y estado.
