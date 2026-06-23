@@ -2,11 +2,6 @@
 vendor/
 composer.lock
 
-# PHPUnit
-.phpunit.cache/
-reports/coverage/
-reports/*.xml
-
 # IDE
 .vscode/
 .idea/
