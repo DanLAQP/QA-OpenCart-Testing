@@ -96,7 +96,7 @@ jobs:
           DB_PASS: opencart
           DB_PREFIX: oc_
         run: |
-          phpunit --no-configuration tests/integration/CheckoutInventoryIntegrationTest.php
+          phpunit --no-configuration tests/integracion/CheckoutInventoryIntegrationTest.php
 
       - name: Smoke test local frontend
         run: |
