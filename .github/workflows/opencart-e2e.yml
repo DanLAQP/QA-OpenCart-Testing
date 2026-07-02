@@ -84,7 +84,12 @@ jobs:
 
       - name: Run Integration Tests
         env:
-          APP_URL: http://127.0.0.1:8000/
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_NAME: opencart
+          DB_USER: opencart
+          DB_PASS: opencart
+          DB_PREFIX: oc_
         run: |
           vendor/bin/phpunit tests/integration/CheckoutInventoryIntegrationTest.php
 
