@@ -82,6 +82,9 @@ jobs:
             --db_port 3306 \
             --db_prefix oc_
 
+      - name: Install PHPUnit
+        run: composer require --dev phpunit/phpunit:^10 --no-interaction
+
       - name: Run Integration Tests
         env:
           DB_HOST: 127.0.0.1
@@ -91,7 +94,7 @@ jobs:
           DB_PASS: opencart
           DB_PREFIX: oc_
         run: |
-          vendor/bin/phpunit tests/integration/CheckoutInventoryIntegrationTest.php
+          ./vendor/bin/phpunit tests/integration/CheckoutInventoryIntegrationTest.php
 
       - name: Smoke test local frontend
         run: |
