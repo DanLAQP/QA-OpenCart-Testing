@@ -82,6 +82,12 @@ jobs:
             --db_port 3306 \
             --db_prefix oc_
 
+      - name: Run Integration Tests
+        env:
+          APP_URL: http://127.0.0.1:8000/
+        run: |
+          vendor/bin/phpunit tests/integration/CheckoutInventoryIntegrationTest.php
+
       - name: Smoke test local frontend
         run: |
           curl -I http://127.0.0.1:8000
