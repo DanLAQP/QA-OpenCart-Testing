@@ -1,0 +1,14 @@
+{
+  "name": "opencart-latency-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Proxy HTTP que inyecta latencia artificial en api/order?call=confirm para el caso de resiliencia",
+  "main": "latency-proxy.js",
+  "scripts": {
+    "start": "node latency-proxy.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "http-proxy-middleware": "^2.0.6"
+  }
+}

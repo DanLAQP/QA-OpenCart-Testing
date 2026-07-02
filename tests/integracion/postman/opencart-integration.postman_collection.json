@@ -1,0 +1,314 @@
+{
+  "info": {
+    "name": "OpenCart - Integracion Carrito -> Pedido",
+    "description": "Pruebas de integracion sobre la frontera api/cart.php (via api/order?call=product_add) -> api/order.php::confirm(). Incluye 3 casos de inyeccion de fallas: sintactico, semantico y resiliencia. Requiere una API key valida (ver variables de entorno api_username / api_key) con la IP del cliente autorizada en Admin > System > Users > API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Firma HMAC requerida por catalog/controller/startup/api.php para toda ruta api/order.",
+          "// Replica exactamente el algoritmo de opencart/catalog/controller/startup/api.php:84-98.",
+          "// Solo se firma si la request ya apunta a route=api/order; deja intactas otras rutas (ej. common/home).",
+          "const currentRoute = pm.request.url.query.get('route');",
+          "if (currentRoute !== 'api/order') {",
+          "  return;",
+          "}",
+          "",
+          "const Crypto = require('crypto-js');",
+          "",
+          "const username = pm.environment.get('api_username');",
+          "const key = pm.environment.get('api_key');",
+          "const route = 'api/order';",
+          "const call = pm.request.url.query.get('call') || '';",
+          "const storeId = pm.environment.get('store_id') || '0';",
+          "const language = pm.environment.get('language') || 'en-gb';",
+          "const currency = pm.environment.get('currency') || 'USD';",
+          "const host = pm.environment.get('host') || 'localhost';",
+          "const phpSelf = pm.environment.get('php_self') || '/QA-OpenCart-Testing/opencart/';",
+          "const time = Math.floor(Date.now() / 1000);",
+          "",
+          "let bodyParams = [];",
+          "if (pm.request.body && pm.request.body.mode === 'urlencoded') {",
+          "  pm.request.body.urlencoded.each((p) => {",
+          "    if (!p.disabled) bodyParams.push(`${encodeURIComponent(p.key)}=${encodeURIComponent(pm.variables.replaceIn(p.value))}`);",
+          "  });",
+          "}",
+          "const postQuery = bodyParams.join('&');",
+          "const postMd5 = Crypto.MD5(postQuery).toString();",
+          "",
+          "const stringToSign = [route, call, username, host, phpSelf, storeId, language, currency, postMd5, time].join('\\n') + '\\n';",
+          "const signatureRaw = Crypto.HmacSHA1(stringToSign, key);",
+          "const signatureB64 = Crypto.enc.Base64.stringify(signatureRaw);",
+          "",
+          "// El signature en base64 puede contener '+' y '/'. pm.request.url.query no los",
+          "// percent-encodea al serializar la URL final, y PHP interpreta un '+' literal en",
+          "// la query string como espacio (application/x-www-form-urlencoded), rompiendo la",
+          "// comparacion de firmas en catalog/controller/startup/api.php:96. Se encodea a mano.",
+          "const signatureEncoded = encodeURIComponent(signatureB64);",
+          "",
+          "pm.request.url.query.upsert({ key: 'route', value: route });",
+          "pm.request.url.query.upsert({ key: 'username', value: username });",
+          "pm.request.url.query.upsert({ key: 'store_id', value: storeId });",
+          "pm.request.url.query.upsert({ key: 'language', value: language });",
+          "pm.request.url.query.upsert({ key: 'currency', value: currency });",
+          "pm.request.url.query.upsert({ key: 'time', value: String(time) });",
+          "pm.request.url.query.upsert({ key: 'signature', value: signatureEncoded });"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "00 - Setup",
+      "item": [
+        {
+          "name": "Iniciar sesion (home)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/index.php?route=common/home", "host": ["{{base_url}}"], "path": ["index.php"], "query": [{ "key": "route", "value": "common/home" }] },
+            "event_note": "Sin firma: ruta publica normal del catalogo, inicializa la cookie de sesion OCSESSID."
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": { "exec": ["// No requiere firma, es ruta publica del catalogo, no de la API firmada."] }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Sesion iniciada (200)', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Ver carrito (cart)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/index.php?route=api/order&call=cart", "host": ["{{base_url}}"], "path": ["index.php"], "query": [{ "key": "route", "value": "api/order" }, { "key": "call", "value": "cart" }] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Carrito accesible (200)', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "01 - Caso Sintactico",
+      "description": "Envio de objetos con campos faltantes o tipos de datos erroneos a api/order?call=product_add (que internamente delega en api/cart.php::addProduct)",
+      "item": [
+        {
+          "name": "product_add sin product_id",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/index.php?route=api/order&call=product_add", "host": ["{{base_url}}"], "path": ["index.php"], "query": [{ "key": "route", "value": "api/order" }, { "key": "call", "value": "product_add" }] },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "quantity", "value": "1" }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Esperado: error controlado por producto invalido (product_id=0)', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json).to.have.property('error');",
+                  "});",
+                  "pm.test('No debe devolver 500 (excepcion no controlada)', function () {",
+                  "  pm.expect(pm.response.code).to.not.equal(500);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "product_add con quantity no numerica (string)",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/index.php?route=api/order&call=product_add", "host": ["{{base_url}}"], "path": ["index.php"], "query": [{ "key": "route", "value": "api/order" }, { "key": "call", "value": "product_add" }] },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "product_id", "value": "{{valid_product_id}}" },
+                { "key": "quantity", "value": "abc" }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HALLAZGO INC-001: backend castea quantity a int silenciosamente en vez de rechazar', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json).to.be.an('object');",
+                  "});",
+                  "pm.test('No debe devolver 500', function () {",
+                  "  pm.expect(pm.response.code).to.not.equal(500);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "product_add con option mal formado (string en vez de array)",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/index.php?route=api/order&call=product_add", "host": ["{{base_url}}"], "path": ["index.php"], "query": [{ "key": "route", "value": "api/order" }, { "key": "call", "value": "product_add" }] },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "product_id", "value": "{{valid_product_id}}" },
+                { "key": "quantity", "value": "1" },
+                { "key": "option", "value": "no-deberia-ser-string" }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('No debe devolver 500 ante option con tipo erroneo', function () {",
+                  "  pm.expect(pm.response.code).to.not.equal(500);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 - Caso Semantico",
+      "description": "Valores legales en formato pero fuera de logica de negocio para el receptor (Subsistema B)",
+      "item": [
+        {
+          "name": "product_add con cantidad mayor al stock disponible",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/index.php?route=api/order&call=product_add", "host": ["{{base_url}}"], "path": ["index.php"], "query": [{ "key": "route", "value": "api/order" }, { "key": "call", "value": "product_add" }] },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "product_id", "value": "{{low_stock_product_id}}" },
+                { "key": "quantity", "value": "99999" }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Esperado: error de stock insuficiente', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json).to.have.property('error');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "product_add con cantidad negativa",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/index.php?route=api/order&call=product_add", "host": ["{{base_url}}"], "path": ["index.php"], "query": [{ "key": "route", "value": "api/order" }, { "key": "call", "value": "product_add" }] },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "product_id", "value": "{{valid_product_id}}" },
+                { "key": "quantity", "value": "-5" }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HALLAZGO INC-002: la API acepta quantity negativa como exitosa en vez de rechazarla', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json).to.be.an('object');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "confirm() sin direccion/metodo de envio previos",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/index.php?route=api/order&call=confirm", "host": ["{{base_url}}"], "path": ["index.php"], "query": [{ "key": "route", "value": "api/order" }, { "key": "call", "value": "confirm" }] },
+            "body": { "mode": "urlencoded", "urlencoded": [] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Esperado: error semantico de checkout incompleto (customer/shipping/payment), no un pedido creado a medias', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json).to.have.property('error');",
+                  "  pm.expect(json.order_id).to.be.undefined;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 - Caso Resiliencia",
+      "description": "Mismo flujo de confirm() pero via {{proxy_url}}, que inyecta latencia alta. Requiere levantar tests/integracion/proxy/latency-proxy.js antes de correr esta carpeta. La firma se sigue calculando sobre el host real (api.php valida server HTTP_HOST del backend OpenCart, no del proxy), por eso host/php_self de la variable de entorno siguen apuntando a localhost.",
+      "item": [
+        {
+          "name": "confirm() a traves de proxy con latencia",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{proxy_url}}/index.php?route=api/order&call=confirm", "host": ["{{proxy_url}}"], "path": ["index.php"], "query": [{ "key": "route", "value": "api/order" }, { "key": "call", "value": "confirm" }] },
+            "body": { "mode": "urlencoded", "urlencoded": [] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('El cliente debe manejar el timeout sin bloquear indefinidamente (ajustar timeout de Postman a < LATENCY_MS)', function () {",
+                  "  pm.expect(pm.response.responseTime).to.be.a('number');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

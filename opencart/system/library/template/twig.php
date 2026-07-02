@@ -1,5 +1,8 @@
 <?php
 namespace Opencart\System\Library\Template;
+
+require_once(__DIR__ . '/opencart_extension.php');
+
 /**
  * Class Twig
  *
@@ -33,7 +36,43 @@ class Twig {
 		// We have to add the C directory as the base directory because twig can only accept the first namespace/,
 		// rather than a multiple namespace system, which took me less than a minute to write. If symphony is like
 		// this, then I have no idea why people use the framework.
-		$this->loader = new \Twig\Loader\FilesystemLoader('./', $this->root);
+		$this->loader = new \Twig\Loader\FilesystemLoader($this->root . '/', $this->root);
+	}
+
+	/**
+	 * Convert OpenCart template syntax to Twig syntax
+	 */
+	protected function convertFilterSyntax(string $code): string {
+		// Convert assign to set: {% assign var = value %} to {% set var = value %}
+		$code = preg_replace('/\{\%\s*assign\s+/', '{% set ', $code);
+
+		// Convert NOT operator: !var to not var
+		$code = preg_replace('/\{\%\s*if\s+!/', '{% if not ', $code);
+		$code = preg_replace_callback(
+			'/\{\%\s*if\s+(.+?)!(\w+)/',
+			function($matches) {
+				return '{% if ' . $matches[1] . 'not ' . $matches[2];
+			},
+			$code
+		);
+
+		// Convert slice(batch) to batch(batch) - OpenCart uses slice incorrectly
+		$code = preg_replace('/\|\s*slice\s*\(\s*(\w+)\s*\)/', '| batch($1)', $code);
+
+		// Convert filter syntax from | filter: arg1, arg2 to | filter(arg1, arg2)
+		$code = preg_replace_callback(
+			'/\|\s*(\w+)\s*:\s*([^|}\n]+?)(?=\||}}|\n|$)/s',
+			function($matches) {
+				$filter = trim($matches[1]);
+				$args = trim($matches[2]);
+				// Remove trailing comma if exists
+				$args = rtrim($args, ',');
+				return '| ' . $filter . '(' . $args . ')';
+			},
+			$code
+		);
+
+		return $code;
 	}
 
 	/**
@@ -93,6 +132,12 @@ class Twig {
 		// We have to remove the root web directory.
 		$file = substr($file, strlen($this->root) + 1);
 
+		// Convert OpenCart filter syntax to Twig syntax
+		if (!$code && is_file($this->root . '/' . $file)) {
+			$code = file_get_contents($this->root . '/' . $file);
+			$code = $this->convertFilterSyntax($code);
+		}
+
 		if ($code) {
 			// render from modified template code
 			$loader = new \Twig\Loader\ArrayLoader([$file => $code]);
@@ -116,9 +161,18 @@ class Twig {
 				$twig->addExtension(new \Twig\Extension\DebugExtension());
 			}
 
+			// Add OpenCart custom extension
+			$twig->addExtension(new \Opencart\System\Library\Template\OpenCartExtension());
+
 			return $twig->render($file, $data);
+		} catch (\Twig\Error\LoaderError $e) {
+			throw new \Exception('Error: Could not load template ' . $filename . '! File: ' . $file . ' Details: ' . $e->getMessage());
 		} catch (\Twig\Error\SyntaxError $e) {
-			throw new \Exception('Error: Could not load template ' . $filename . '!');
+			throw new \Exception('Error: Could not load template ' . $filename . '! File: ' . $file . ' Details: ' . $e->getMessage());
+		} catch (\Twig\Error\RuntimeError $e) {
+			throw new \Exception('Error: Could not load template ' . $filename . '! File: ' . $file . ' Runtime Error at line ' . $e->getSourceContext()->getPath() . ': ' . $e->getMessage());
+		} catch (\Exception $e) {
+			throw new \Exception('Error: Could not load template ' . $filename . '! File: ' . $file . ' Details: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
 		}
 	}
 }
