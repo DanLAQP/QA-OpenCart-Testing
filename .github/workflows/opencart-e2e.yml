@@ -83,7 +83,9 @@ jobs:
             --db_prefix oc_
 
       - name: Install PHPUnit
-        run: composer require --dev phpunit/phpunit:^10 --no-interaction
+        run: |
+          composer global require phpunit/phpunit:^10
+          echo "$HOME/.composer/vendor/bin" >> $GITHUB_PATH
 
       - name: Run Integration Tests
         env:
@@ -94,7 +96,7 @@ jobs:
           DB_PASS: opencart
           DB_PREFIX: oc_
         run: |
-          ./vendor/bin/phpunit tests/integration/CheckoutInventoryIntegrationTest.php
+          phpunit tests/integration/CheckoutInventoryIntegrationTest.php
 
       - name: Smoke test local frontend
         run: |
