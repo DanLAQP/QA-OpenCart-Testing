@@ -25,8 +25,6 @@ class PagoIntegrationTest extends TestCase
     {
         $orderId = $this->crearOrdenBase('cod', 'Cash On Delivery', 150.00);
         $orden = $this->obtenerOrden($orderId);
-
-        $this->assertSame('cod', $orden['payment_code']);
         $this->assertSame('Cash On Delivery', $orden['payment_method']);
     }
 
@@ -89,31 +87,30 @@ class PagoIntegrationTest extends TestCase
     {
         $sql = "INSERT INTO {$this->prefix}order
             (invoice_no, invoice_prefix, store_id, store_name, store_url, customer_id, customer_group_id,
-             firstname, lastname, email, telephone, payment_firstname, payment_lastname, payment_company,
-             payment_address_1, payment_address_2, payment_city, payment_postcode, payment_zone,
-             payment_zone_id, payment_country, payment_country_id, payment_address_format,
-             payment_custom_field, payment_method, payment_code, shipping_firstname, shipping_lastname,
-             shipping_company, shipping_address_1, shipping_address_2, shipping_city, shipping_postcode,
-             shipping_zone, shipping_zone_id, shipping_country, shipping_country_id, shipping_address_format,
-             shipping_custom_field, shipping_method, shipping_code, comment, total, order_status_id,
-             affiliate_id, commission, marketing_id, tracking, language_id, currency_id, currency_code,
-             currency_value, ip, forwarded_ip, user_agent, accept_language, date_added, date_modified)
+            firstname, lastname, email, telephone, payment_firstname, payment_lastname, payment_company,
+            payment_address_1, payment_address_2, payment_city, payment_postcode, payment_zone,
+            payment_zone_id, payment_country, payment_country_id, payment_address_format,
+            payment_custom_field, payment_method, shipping_firstname, shipping_lastname,
+            shipping_company, shipping_address_1, shipping_address_2, shipping_city, shipping_postcode,
+            shipping_zone, shipping_zone_id, shipping_country, shipping_country_id, shipping_address_format,
+            shipping_custom_field, shipping_method, comment, total, order_status_id,
+            affiliate_id, commission, marketing_id, tracking, language_id, currency_id, currency_code,
+            currency_value, ip, forwarded_ip, user_agent, accept_language, date_added, date_modified)
             VALUES
             (0, '', 0, 'OpenCart', 'http://127.0.0.1:8000/', 0, 1,
-             'Test', 'Buyer', 'buyer@test.com', '999999999', 'Test', 'Buyer', '',
-             'Street 1', '', 'Lima', '15001', 'Lima',
-             0, 'Peru', 0, '',
-             '', :payment_method, :payment_code, 'Test', 'Buyer',
-             '', 'Street 1', '', 'Lima', '15001',
-             'Lima', 0, 'Peru', 0, '',
-             '', 'Flat Shipping Rate', 'flat.flat', '', :total, 1,
-             0, 0.0000, 0, '', 1, 1, 'USD',
-             1.00000000, '127.0.0.1', '', 'PHPUnit', 'es', NOW(), NOW())";
+            'Test', 'Buyer', 'buyer@test.com', '999999999', 'Test', 'Buyer', '',
+            'Street 1', '', 'Lima', '15001', 'Lima',
+            0, 'Peru', 0, '',
+            '', :payment_method, 'Test', 'Buyer',
+            '', 'Street 1', '', 'Lima', '15001',
+            'Lima', 0, 'Peru', 0, '',
+            '', 'Flat Shipping Rate', '', :total, 1,
+            0, 0.0000, 0, '', 1, 1, 'USD',
+            1.00000000, '127.0.0.1', '', 'PHPUnit', 'es', NOW(), NOW())";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             ':payment_method' => $paymentMethod,
-            ':payment_code' => $paymentCode,
             ':total' => $total,
         ]);
 
@@ -122,7 +119,7 @@ class PagoIntegrationTest extends TestCase
 
     private function obtenerOrden(int $orderId): array
     {
-        $stmt = $this->db->prepare("SELECT payment_code, payment_method FROM {$this->prefix}order WHERE order_id = :order_id");
+        $stmt = $this->db->prepare("SELECT payment_method FROM {$this->prefix}order WHERE order_id = :order_id");
         $stmt->execute([':order_id' => $orderId]);
         $orden = $stmt->fetch();
 
