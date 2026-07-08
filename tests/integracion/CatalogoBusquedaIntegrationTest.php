@@ -97,14 +97,21 @@ class CatalogoBusquedaIntegrationTest extends TestCase
     {
         $sql = "SELECT c.category_id
                 FROM {$this->prefix}category c
-                INNER JOIN {$this->prefix}category_description cd ON cd.category_id = c.category_id
-                WHERE c.status = 1
+                INNER JOIN {$this->prefix}category_description cd 
+                    ON cd.category_id = c.category_id
+                INNER JOIN {$this->prefix}product_to_category pc 
+                    ON pc.category_id = c.category_id
+                INNER JOIN {$this->prefix}product p 
+                    ON p.product_id = pc.product_id
+                WHERE c.status = 1 
+                AND p.status = 1
+                GROUP BY c.category_id
                 LIMIT 1";
 
         $categoria = $this->db->query($sql)->fetch();
 
         if (!$categoria) {
-            $this->fail('No existe una categoría activa para ejecutar la prueba.');
+            $this->fail('No existe una categoría activa con productos activos para ejecutar la prueba.');
         }
 
         return $categoria;
