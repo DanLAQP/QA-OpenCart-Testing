@@ -87,6 +87,12 @@ jobs:
           composer global require phpunit/phpunit:^10
           echo "$HOME/.composer/vendor/bin" >> $GITHUB_PATH
 
+      - name: Mostrar estructura de oc_order
+        run: |
+         echo "===== ESTRUCTURA DE oc_order ====="
+         mysql -h 127.0.0.1 -uopencart -popencart opencart -e "DESCRIBE oc_order;"
+         echo "=================================="
+
       - name: Run Integration Tests
         env:
           DB_HOST: 127.0.0.1
