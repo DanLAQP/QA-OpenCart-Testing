@@ -5,7 +5,6 @@
 Este documento define el plan de pruebas de sistema para los módulos seleccionados del proyecto OpenCart. Cubre pruebas funcionales de extremo a extremo (E2E), pruebas no funcionales (rendimiento, estrés, compatibilidad, usabilidad, seguridad y adaptabilidad) y la clasificación de Requisitos No Funcionales (RNF) aplicables al proyecto.
 
 **Stack tecnológico:** PHP · PHPUnit · OpenCart · XAMPP · GitHub  
-**Entorno de pruebas:** Local (`http://localhost/opencart-local`)  
 **Módulos cubiertos:**
 
 ---
@@ -50,7 +49,7 @@ Las pruebas E2E simulan el recorrido completo de un usuario real interactuando c
 
 | Paso | Acción | Resultado esperado |
 |---|---|---|
-| 1 | Acceder a `http://localhost/opencart-local` | Se muestra la página principal de la tienda |
+| 1 | Acceder a `https://github.com/DanLAQP/QA-OpenCart-Testing/actions/runs/` | Se muestra la página principal de la tienda |
 | 2 | Ir a `My Account → Register` | Se muestra el formulario de registro |
 | 3 | Completar First Name, Last Name, E-Mail, Password | Campos aceptan los datos ingresados |
 | 4 | Activar toggle de Privacy Policy | Toggle se activa visualmente |
@@ -392,7 +391,7 @@ Escenario: 3 usuarios navegan continuamente durante 30 minutos
 ## 12. Criterios de entrada y salida
 
 ### Criterios de entrada (para iniciar las pruebas)
-- El sistema está desplegado y accesible en `http://localhost/opencart-local`
+- El sistema está desplegado y accesible en `https://github.com/DanLAQP/QA-OpenCart-Testing/actions/runs/`
 - La base de datos está inicializada con datos de prueba
 - Las pruebas unitarias (PHPUnit) ejecutan en verde
 - Todos los módulos del equipo están integrados en el repositorio
