@@ -1,6 +1,6 @@
 # Pruebas de Integración — Catálogo y Búsqueda
 
-Archivo de pruebas: `CatalogoBusquedaIntegrationTest.php`
+Archivo de pruebas: [`CatalogoBusquedaIntegrationTest.php`](./CatalogoBusquedaIntegrationTest.php)
 
 ## Objetivo
 
