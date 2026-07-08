@@ -79,21 +79,21 @@ class TotalesDescuentosIntegrationTest extends TestCase
 
         $sql = "INSERT INTO {$this->prefix}order
             (invoice_no, invoice_prefix, store_id, store_name, store_url, customer_id, customer_group_id,
-             firstname, lastname, email, telephone, payment_firstname, payment_lastname, payment_company,
-             payment_address_1, payment_address_2, payment_city, payment_postcode, payment_zone,
-             payment_zone_id, payment_country, payment_country_id, payment_address_format, payment_custom_field,
-             payment_method, payment_code, shipping_firstname, shipping_lastname, shipping_company, shipping_address_1,
-             shipping_address_2, shipping_city, shipping_postcode, shipping_zone, shipping_zone_id, shipping_country,
-             shipping_country_id, shipping_address_format, shipping_custom_field, shipping_method, shipping_code, comment,
-             total, order_status_id, affiliate_id, commission, marketing_id, tracking, language_id, currency_id,
-             currency_code, currency_value, ip, forwarded_ip, user_agent, accept_language, date_added, date_modified)
+            firstname, lastname, email, telephone, payment_firstname, payment_lastname, payment_company,
+            payment_address_1, payment_address_2, payment_city, payment_postcode, payment_zone,
+            payment_zone_id, payment_country, payment_country_id, payment_address_format, payment_custom_field,
+            payment_method, shipping_firstname, shipping_lastname, shipping_company, shipping_address_1,
+            shipping_address_2, shipping_city, shipping_postcode, shipping_zone, shipping_zone_id, shipping_country,
+            shipping_country_id, shipping_address_format, shipping_custom_field, shipping_method, comment,
+            total, order_status_id, affiliate_id, commission, marketing_id, tracking, language_id, currency_id,
+            currency_code, currency_value, ip, forwarded_ip, user_agent, accept_language, date_added, date_modified)
             VALUES
             (0, '', 0, 'OpenCart', 'http://127.0.0.1:8000/', 0, 1,
-             'Total', 'Tester', 'total@test.com', '900000000', 'Total', 'Tester', '',
-             'Street 1', '', 'Lima', '15001', 'Lima', 0, 'Peru', 0, '', '',
-             'Cash On Delivery', 'cod', 'Total', 'Tester', '', 'Street 1', '', 'Lima', '15001', 'Lima', 0, 'Peru',
-             0, '', '', 'Flat Shipping Rate', 'flat.flat', '', :total, 1, 0, 0.0000, 0, '', 1, 1,
-             'USD', 1.00000000, '127.0.0.1', '', 'PHPUnit', 'es', NOW(), NOW())";
+            'Total', 'Tester', 'total@test.com', '900000000', 'Total', 'Tester', '',
+            'Street 1', '', 'Lima', '15001', 'Lima', 0, 'Peru', 0, '', '',
+            'Cash On Delivery', 'Total', 'Tester', '', 'Street 1', '', 'Lima', '15001', 'Lima', 0, 'Peru',
+            0, '', '', 'Flat Shipping Rate', '', :total, 1, 0, 0.0000, 0, '', 1, 1,
+            'USD', 1.00000000, '127.0.0.1', '', 'PHPUnit', 'es', NOW(), NOW())";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':total' => $total]);
@@ -101,12 +101,15 @@ class TotalesDescuentosIntegrationTest extends TestCase
 
         $this->insertTotal($orderId, 'sub_total', 'Sub-Total', $subtotal, 1);
         $this->insertTotal($orderId, 'tax', 'Tax', $tax, 5);
+
         if ($coupon !== 0.0) {
             $this->insertTotal($orderId, 'coupon', 'Coupon', $coupon, 6);
         }
+
         if ($voucher !== 0.0) {
             $this->insertTotal($orderId, 'voucher', 'Voucher', $voucher, 7);
         }
+
         $this->insertTotal($orderId, 'total', 'Total', $total, 9);
 
         return $orderId;
