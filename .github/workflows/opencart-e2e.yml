@@ -97,6 +97,7 @@ jobs:
           DB_PREFIX: oc_
         run: |
           phpunit --no-configuration tests/integracion/CheckoutInventoryIntegrationTest.php
+          phpunit --no-configuration tests/integracion/CarritoCheckoutIntegrationTest.php
 
       - name: Smoke test local frontend
         run: |
