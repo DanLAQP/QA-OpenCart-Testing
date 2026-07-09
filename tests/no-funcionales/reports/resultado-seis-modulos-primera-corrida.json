@@ -1,0 +1,538 @@
+{
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+            "Admin: login": {
+                "name": "Admin: login",
+                "path": "::Admin: login",
+                "id": "f0beaa908a5f5a6b01265d590582f831",
+                "groups": {},
+                "checks": {}
+            },
+            "Admin: listado de productos filtrado por cantidad": {
+                "name": "Admin: listado de productos filtrado por cantidad",
+                "path": "::Admin: listado de productos filtrado por cantidad",
+                "id": "6dd065f8585940e57638c64e2eed9ebd",
+                "groups": {},
+                "checks": {
+                        "listado admin responde 200": {
+                            "passes": 282,
+                            "fails": 0,
+                            "name": "listado admin responde 200",
+                            "path": "::Admin: listado de productos filtrado por cantidad::listado admin responde 200",
+                            "id": "aa96e5c0aaf3568d4b7050030806cf3e"
+                        }
+                    }
+            },
+            "Cliente: buscar productos": {
+                "groups": {},
+                "checks": {
+                        "busqueda responde 200": {
+                            "id": "b70e73ab4ed6e0516f2d2b1715b9837f",
+                            "passes": 198,
+                            "fails": 0,
+                            "name": "busqueda responde 200",
+                            "path": "::Cliente: buscar productos::busqueda responde 200"
+                        }
+                    },
+                "name": "Cliente: buscar productos",
+                "path": "::Cliente: buscar productos",
+                "id": "e2e6fcbff7c3ddf7781aa78e4e515c23"
+            },
+            "Cliente: agregar producto al carrito": {
+                "groups": {},
+                "checks": {
+                        "agregar al carrito responde 200": {
+                            "path": "::Cliente: agregar producto al carrito::agregar al carrito responde 200",
+                            "id": "e597b288c1efa968b46fe92e54cf1c40",
+                            "passes": 119,
+                            "fails": 0,
+                            "name": "agregar al carrito responde 200"
+                        },
+                        "respuesta de agregar es JSON valido": {
+                            "path": "::Cliente: agregar producto al carrito::respuesta de agregar es JSON valido",
+                            "id": "ee00e4af6ef5e1172781e82611eb7e6d",
+                            "passes": 119,
+                            "fails": 0,
+                            "name": "respuesta de agregar es JSON valido"
+                        }
+                    },
+                "name": "Cliente: agregar producto al carrito",
+                "path": "::Cliente: agregar producto al carrito",
+                "id": "37ca8fcfcc46fb95128cd5e70630d3ac"
+            },
+            "Cliente: ver listado de resenas de un producto": {
+                "name": "Cliente: ver listado de resenas de un producto",
+                "path": "::Cliente: ver listado de resenas de un producto",
+                "id": "12d8669aca1329ac95c933f8b3f1c44e",
+                "groups": {},
+                "checks": {
+                        "listado de resenas responde 200": {
+                            "name": "listado de resenas responde 200",
+                            "path": "::Cliente: ver listado de resenas de un producto::listado de resenas responde 200",
+                            "id": "0580a58ac03bfdda68fd4d24db7874a3",
+                            "passes": 148,
+                            "fails": 0
+                        }
+                    }
+            },
+            "Cliente: agregar producto antes del checkout": {
+                "checks": {
+                    "agregar antes de checkout responde 200": {
+                        "name": "agregar antes de checkout responde 200",
+                        "path": "::Cliente: agregar producto antes del checkout::agregar antes de checkout responde 200",
+                        "id": "25d5e85de8866c5fd5b02ea024fc8f32",
+                        "passes": 114,
+                        "fails": 0
+                    }
+                },
+                "name": "Cliente: agregar producto antes del checkout",
+                "path": "::Cliente: agregar producto antes del checkout",
+                "id": "41f4aa48fa63b5dbfca5356e5d38696b",
+                "groups": {}
+            },
+            "Cliente: navegar categoria": {
+                "path": "::Cliente: navegar categoria",
+                "id": "d47dac8a393711e0716d735684a85e32",
+                "groups": {},
+                "checks": {
+                        "categoria responde 200": {
+                            "name": "categoria responde 200",
+                            "path": "::Cliente: navegar categoria::categoria responde 200",
+                            "id": "dcb06e635256b362e5004816e21fd2cc",
+                            "passes": 198,
+                            "fails": 0
+                        }
+                    },
+                "name": "Cliente: navegar categoria"
+            },
+            "Cliente: ver carrito": {
+                "path": "::Cliente: ver carrito",
+                "id": "14ed9abaea47572c5b72a17a9bc0679c",
+                "groups": {},
+                "checks": {
+                        "ver carrito responde 200": {
+                            "path": "::Cliente: ver carrito::ver carrito responde 200",
+                            "id": "5604ca8f94f5e28c18b9d65a56405052",
+                            "passes": 119,
+                            "fails": 0,
+                            "name": "ver carrito responde 200"
+                        },
+                        "ver carrito devuelve contenido": {
+                            "fails": 0,
+                            "name": "ver carrito devuelve contenido",
+                            "path": "::Cliente: ver carrito::ver carrito devuelve contenido",
+                            "id": "b46e1ad3cadda5bf80a3304ade886d1a",
+                            "passes": 119
+                        }
+                    },
+                "name": "Cliente: ver carrito"
+            },
+            "Cliente: navegar catalogo (inventario)": {
+                "groups": {},
+                "checks": {
+                        "home responde 200": {
+                            "path": "::Cliente: navegar catalogo (inventario)::home responde 200",
+                            "id": "916e1ab353dc854023e9cae523327008",
+                            "passes": 829,
+                            "fails": 0,
+                            "name": "home responde 200"
+                        }
+                    },
+                "name": "Cliente: navegar catalogo (inventario)",
+                "path": "::Cliente: navegar catalogo (inventario)",
+                "id": "96615580ea1ab050b44c7df0e86d9096"
+            },
+            "Cliente: obtener totales del carrito (checkout)": {
+                "name": "Cliente: obtener totales del carrito (checkout)",
+                "path": "::Cliente: obtener totales del carrito (checkout)",
+                "id": "2ffbd8b27c9a01053af1dc0a2d9b116c",
+                "groups": {},
+                "checks": {
+                        "totales de checkout responde 200": {
+                            "passes": 114,
+                            "fails": 0,
+                            "name": "totales de checkout responde 200",
+                            "path": "::Cliente: obtener totales del carrito (checkout)::totales de checkout responde 200",
+                            "id": "debfd7f55d7678f382576304a1b11cd5"
+                        },
+                        "totales de checkout devuelve contenido": {
+                            "name": "totales de checkout devuelve contenido",
+                            "path": "::Cliente: obtener totales del carrito (checkout)::totales de checkout devuelve contenido",
+                            "id": "119c7c8784444143231ba5f9a017f245",
+                            "passes": 114,
+                            "fails": 0
+                        }
+                    }
+            },
+            "Cliente: enviar una resena nueva": {
+                "path": "::Cliente: enviar una resena nueva",
+                "id": "c38a605e1f67dd94d45abcbfba188e22",
+                "groups": {},
+                "checks": {
+                        "enviar resena responde 200": {
+                            "name": "enviar resena responde 200",
+                            "path": "::Cliente: enviar una resena nueva::enviar resena responde 200",
+                            "id": "b99b6da8ee3b48a6166bde444ba74c29",
+                            "passes": 148,
+                            "fails": 0
+                        },
+                        "respuesta de resena es JSON valido": {
+                            "fails": 0,
+                            "name": "respuesta de resena es JSON valido",
+                            "path": "::Cliente: enviar una resena nueva::respuesta de resena es JSON valido",
+                            "id": "7f44325f6a8d3d86c66ca65455c31fe6",
+                            "passes": 148
+                        }
+                    },
+                "name": "Cliente: enviar una resena nueva"
+            },
+            "Cliente: ver detalle de producto": {
+                "name": "Cliente: ver detalle de producto",
+                "path": "::Cliente: ver detalle de producto",
+                "id": "9fe07d3ab61368aa70134a861b66d13d",
+                "groups": {},
+                "checks": {
+                        "detalle de producto responde 200": {
+                            "name": "detalle de producto responde 200",
+                            "path": "::Cliente: ver detalle de producto::detalle de producto responde 200",
+                            "id": "434f922780e0f1674b8308aa5bb9d77a",
+                            "passes": 198,
+                            "fails": 0
+                        }
+                    }
+            },
+            "Cliente: ver formulario de login": {
+                "name": "Cliente: ver formulario de login",
+                "path": "::Cliente: ver formulario de login",
+                "id": "f8577480ae959a051de71845ff08f876",
+                "groups": {},
+                "checks": {
+                        "formulario de login responde 200": {
+                            "path": "::Cliente: ver formulario de login::formulario de login responde 200",
+                            "id": "9792348008bc9e29b0abe39ff4dc359f",
+                            "passes": 87,
+                            "fails": 0,
+                            "name": "formulario de login responde 200"
+                        }
+                    }
+            },
+            "Cliente: actualizar cantidad en el carrito": {
+                "path": "::Cliente: actualizar cantidad en el carrito",
+                "id": "f37e68426885de8decad3f6af88c8409",
+                "groups": {},
+                "checks": {
+                        "actualizar cantidad responde 200": {
+                            "passes": 119,
+                            "fails": 0,
+                            "name": "actualizar cantidad responde 200",
+                            "path": "::Cliente: actualizar cantidad en el carrito::actualizar cantidad responde 200",
+                            "id": "175a6ab72018370b5f73fcf1926e0e6c"
+                        }
+                    },
+                "name": "Cliente: actualizar cantidad en el carrito"
+            },
+            "Cliente: ver detalle de producto (inventario)": {
+                "groups": {},
+                "checks": {
+                        "detalle de producto responde 200": {
+                            "fails": 0,
+                            "name": "detalle de producto responde 200",
+                            "path": "::Cliente: ver detalle de producto (inventario)::detalle de producto responde 200",
+                            "id": "51a967476b956a31be6dc68831ebf388",
+                            "passes": 829
+                        }
+                    },
+                "name": "Cliente: ver detalle de producto (inventario)",
+                "path": "::Cliente: ver detalle de producto (inventario)",
+                "id": "04f1999347fbebd0ee774b3dfeedfb8e"
+            },
+            "Cliente: ver pagina de checkout": {
+                "name": "Cliente: ver pagina de checkout",
+                "path": "::Cliente: ver pagina de checkout",
+                "id": "a1eca3b38ac4f7b071c0a87fa2653dd3",
+                "groups": {},
+                "checks": {
+                        "pagina de checkout responde 200": {
+                            "name": "pagina de checkout responde 200",
+                            "path": "::Cliente: ver pagina de checkout::pagina de checkout responde 200",
+                            "id": "5125963c80f138682c60e58552df0f7b",
+                            "passes": 114,
+                            "fails": 0
+                        }
+                    }
+            },
+            "Cliente: eliminar producto del carrito": {
+                "id": "800c029627356ea7105864ba60ef375b",
+                "groups": {},
+                "checks": {
+                        "eliminar del carrito responde 200": {
+                            "name": "eliminar del carrito responde 200",
+                            "path": "::Cliente: eliminar producto del carrito::eliminar del carrito responde 200",
+                            "id": "97d377aa73d98c79e68f11301ee0477c",
+                            "passes": 119,
+                            "fails": 0
+                        }
+                    },
+                "name": "Cliente: eliminar producto del carrito",
+                "path": "::Cliente: eliminar producto del carrito"
+            },
+            "Cliente: agregar al carrito (validacion de stock)": {
+                "name": "Cliente: agregar al carrito (validacion de stock)",
+                "path": "::Cliente: agregar al carrito (validacion de stock)",
+                "id": "b7eec0ace8759e3580afae2799e4dfa5",
+                "groups": {},
+                "checks": {
+                        "agregar al carrito responde 200": {
+                            "passes": 829,
+                            "fails": 0,
+                            "name": "agregar al carrito responde 200",
+                            "path": "::Cliente: agregar al carrito (validacion de stock)::agregar al carrito responde 200",
+                            "id": "61a124781918ae46b0a09e70ba8efd84"
+                        },
+                        "respuesta es JSON valido": {
+                            "fails": 0,
+                            "name": "respuesta es JSON valido",
+                            "path": "::Cliente: agregar al carrito (validacion de stock)::respuesta es JSON valido",
+                            "id": "22ed000fb3916f0b06d36e9dd92fe22c",
+                            "passes": 829
+                        }
+                    }
+            },
+            "Cliente: registrar cuenta nueva": {
+                "name": "Cliente: registrar cuenta nueva",
+                "path": "::Cliente: registrar cuenta nueva",
+                "id": "3477a36cccfcff4169a0a54f04e57dbf",
+                "groups": {},
+                "checks": {
+                        "registro responde 200": {
+                            "name": "registro responde 200",
+                            "path": "::Cliente: registrar cuenta nueva::registro responde 200",
+                            "id": "b86c40f75b943b78891773388a957f7b",
+                            "passes": 87,
+                            "fails": 0
+                        },
+                        "respuesta de registro es JSON valido": {
+                            "name": "respuesta de registro es JSON valido",
+                            "path": "::Cliente: registrar cuenta nueva::respuesta de registro es JSON valido",
+                            "id": "ec5d7ec17ea869e0b402e2e9e767ad47",
+                            "passes": 87,
+                            "fails": 0
+                        }
+                    }
+            }
+        },
+        "checks": {}
+    },
+    "metrics": {
+        "duracion_inventario": {
+            "avg": 133.23833888218718,
+            "min": 28.409,
+            "med": 145.0402,
+            "max": 485.948,
+            "p(90)": 194.5025,
+            "p(95)": 215.78161999999986,
+            "thresholds": {
+                "p(95)<600": false
+            }
+        },
+        "vus_max": {
+            "min": 59,
+            "max": 59,
+            "value": 59
+        },
+        "checks": {
+            "passes": 6067,
+            "fails": 0,
+            "value": 1
+        },
+        "data_received": {
+            "count": 114682138,
+            "rate": 537300.3932460031
+        },
+        "group_duration": {
+            "min": 24.9279,
+            "med": 143.829,
+            "max": 840.2997,
+            "p(90)": 236.41982000000002,
+            "p(95)": 292.55735999999973,
+            "avg": 140.59513369146566
+        },
+        "duracion_listado_admin": {
+            "p(90)": 104.07364000000001,
+            "p(95)": 119.48168999999999,
+            "avg": 76.82788439716303,
+            "min": 37.1147,
+            "med": 70.9004,
+            "max": 362.522,
+            "thresholds": {
+                "p(95)<1000": false
+            }
+        },
+        "http_req_duration": {
+            "avg": 127.10090486238512,
+            "min": 24.926,
+            "med": 127.5341,
+            "max": 804.1628,
+            "p(90)": 205.25123000000002,
+            "p(95)": 257.396615,
+            "thresholds": {
+                "p(95)<800": false
+            }
+        },
+        "iterations": {
+            "rate": 8.325470866249,
+            "count": 1777
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 5450,
+            "thresholds": {
+                "rate<0.01": false
+            },
+            "value": 0
+        },
+        "duracion_checkout": {
+            "avg": 106.64477192982463,
+            "min": 30.1318,
+            "med": 80.84535,
+            "max": 369.3054,
+            "p(90)": 183.40171000000004,
+            "p(95)": 207.68889,
+            "thresholds": {
+                "p(95)<700": false
+            }
+        },
+        "data_sent": {
+            "count": 1154372,
+            "rate": 5408.379546884406
+        },
+        "http_reqs": {
+            "rate": 25.533942724286465,
+            "count": 5450
+        },
+        "errores_negocio": {
+            "passes": 0,
+            "fails": 1416,
+            "thresholds": {
+                "rate<0.05": false
+            },
+            "value": 0
+        },
+        "http_req_waiting": {
+            "p(90)": 188.68531000000002,
+            "p(95)": 241.44401500000004,
+            "avg": 121.55579291743128,
+            "min": 24.926,
+            "med": 123.8998,
+            "max": 704.3791
+        },
+        "http_req_connecting": {
+            "avg": 0.00724919266055046,
+            "min": 0,
+            "med": 0,
+            "max": 2.5776,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "iteration_duration": {
+            "min": 2158.0859,
+            "med": 4368.7334,
+            "max": 5519.1965,
+            "p(90)": 4708.50812,
+            "p(95)": 5211.5178,
+            "avg": 4009.5880795160397
+        },
+        "http_req_duration{expected_response:true}": {
+            "p(90)": 205.25123000000002,
+            "p(95)": 257.396615,
+            "avg": 127.10090486238512,
+            "min": 24.926,
+            "med": 127.5341,
+            "max": 804.1628
+        },
+        "vus": {
+            "value": 1,
+            "min": 1,
+            "max": 59
+        },
+        "duracion_carrito": {
+            "avg": 61.338217857142894,
+            "min": 24.926,
+            "med": 55.0093,
+            "max": 240.1189,
+            "p(90)": 88.2723,
+            "p(95)": 104.373,
+            "thresholds": {
+                "p(95)<600": false
+            }
+        },
+        "duracion_login_registro": {
+            "p(90)": 229.7068,
+            "p(95)": 264.1343,
+            "avg": 169.76327126436792,
+            "min": 97.4301,
+            "med": 157.5618,
+            "max": 585.9137,
+            "thresholds": {
+                "p(95)<700": false
+            }
+        },
+        "http_req_blocked": {
+            "p(95)": 0,
+            "avg": 0.013868440366972476,
+            "min": 0,
+            "med": 0,
+            "max": 7.4097,
+            "p(90)": 0
+        },
+        "http_req_tls_handshaking": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "http_req_sending": {
+            "med": 0,
+            "max": 2.5141,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.00844891743119266,
+            "min": 0
+        },
+        "http_req_receiving": {
+            "p(95)": 30.898635000000002,
+            "avg": 5.536663027522926,
+            "min": 0,
+            "med": 1.3053,
+            "max": 190.9889,
+            "p(90)": 21.04729
+        },
+        "duracion_resenas": {
+            "avg": 105.78299909909909,
+            "min": 31.4718,
+            "med": 73.0575,
+            "max": 492.0943,
+            "p(90)": 191.78919000000002,
+            "p(95)": 223.13145999999995,
+            "thresholds": {
+                "p(95)<500": false
+            }
+        },
+        "duracion_catalogo_busqueda": {
+            "avg": 226.42608080808077,
+            "min": 114.9793,
+            "med": 195.5178,
+            "max": 804.1628,
+            "p(90)": 319.13521000000003,
+            "p(95)": 371.31743500000005,
+            "thresholds": {
+                "p(95)<500": false
+            }
+        }
+    }
+}
