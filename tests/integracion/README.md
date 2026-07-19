@@ -127,9 +127,3 @@ tests/integracion/
 ```bash
 vendor/bin/phpunit tests/integracion
 ```
-
----
-
-## Observación importante
-
-Esta estructura no garantiza por sí sola una cobertura total, pero sí deja una base organizada para medir y expandir la cobertura de integración con trazabilidad real hacia código, base de datos y CI/CD.
