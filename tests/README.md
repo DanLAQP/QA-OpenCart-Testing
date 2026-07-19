@@ -1,117 +1,85 @@
-# Índice de Pruebas de Integración — OpenCart
+# Pruebas de calidad — OpenCart
 
-Este árbol organiza las suites de integración del proyecto por dominio funcional y las relaciona con una estrategia de cobertura en **5 capas**.
+Este directorio reúne la estrategia de aseguramiento de calidad del proyecto **QA OpenCart Testing**. Incluye pruebas unitarias, de integración, de sistema, de aceptación y no funcionales, junto con sus planes, casos, evidencias y reportes de incidentes.
 
-## Las 5 coberturas que debe cumplir esta base
+> **Sistema bajo prueba:** OpenCart 4.x  
+> **Código utilizado para las pruebas desplegadas:** `upload/`  
+> **Tecnologías principales:** PHP 8.1+, PHPUnit 11, MySQL, k6 y GitHub Actions
 
-### 1. Cobertura estructural
-Responde a si existen carpetas y suites para los módulos importantes del sistema.
+## Tipos de pruebas
 
-Esta estructura cubre esa capa organizando las pruebas por dominio:
+| Nivel | Ubicación | Propósito | Ejecución |
+|---|---|---|---|
+| Unitarias | [`unitarias/`](unitarias/README.md) | Validar clases y reglas de negocio de forma aislada mediante mocks | Automatizada con PHPUnit |
+| Integración | [`integracion/`](integracion/README.md) | Comprobar la comunicación entre módulos, persistencia y base de datos | Automatizada con PHPUnit y MySQL |
+| Sistema | [`sistema/`](sistema/README.md) | Validar flujos completos E2E y requisitos técnicos del sistema | Manual y automatizada |
+| Aceptación | [`aceptacion/`](aceptacion/README.md) | Verificar que el sistema satisface los criterios del negocio y del usuario | Manual, con criterios Gherkin |
+| No funcionales | [`no-funcionales/`](no-funcionales/README.md) | Evaluar rendimiento, seguridad, disponibilidad, usabilidad y mantenibilidad | k6, checklists y revisión técnica |
 
-- `carrito-checkout`
-- `clientes-autenticacion`
-- `catalogo-busqueda`
-- `gestion-inventario`
-- `sistema-resenas`
-- `pagos`
-- `pedidos`
-- `envios`
-- `totales-descuentos`
+## Módulos funcionales cubiertos
 
-### 2. Cobertura funcional
-Responde a si cada suite valida reglas reales del módulo: flujo feliz, errores, límites, reglas de negocio y persistencia.
+1. Login y registro.
+2. Catálogo y búsqueda.
+3. Carrito de compras.
+4. Checkout y pago.
+5. Gestión de inventario.
+6. Sistema de reseñas.
 
-Cada carpeta debe contener pruebas que cubran al menos:
+Las pruebas de integración también incluyen dominios transversales como clientes y autenticación, pagos, pedidos, envíos, totales y descuentos.
 
-- flujo principal
-- validaciones críticas
-- límites relevantes
-- errores semánticos o sintácticos
-- consistencia de datos persistidos
-
-### 3. Cobertura transversal
-Responde a si se validan flujos que cruzan varios módulos.
-
-En esta base, la cobertura transversal aparece sobre todo en suites como:
-
-- `carrito-checkout/CarritoCheckoutIntegrationTest.php`
-- `gestion-inventario/CheckoutInventoryIntegrationTest.php`
-- futuras suites de `pagos`, `pedidos`, `envios` y `totales-descuentos`
-
-Estas pruebas deben verificar cadenas funcionales como:
-
-- carrito → checkout → envío → pago → pedido
-- cambio de dirección → recálculo de envío → recálculo de total
-- confirmación de pedido → historial → consistencia de tablas
-
-### 4. Cobertura real del código
-Responde a si las pruebas trabajan con tablas, reglas y persistencia reales del proyecto.
-
-Esta base está diseñada para usar:
-
-- MySQL real
-- variables de entorno reales del pipeline
-- tablas como `oc_product`, `oc_order`, `oc_order_product`, `oc_order_total`, `oc_order_history`, `oc_customer`, `oc_review`, entre otras
-
-### 5. Ejecución real en CI/CD
-Responde a si las suites realmente se ejecutan dentro del pipeline.
-
-Esta capa se cubre con:
-
-- un workflow de GitHub Actions
-- base de datos MySQL real
-- instalación previa de OpenCart
-- ejecución de `vendor/bin/phpunit tests/integracion`
-- logs y artifacts cuando corresponda
-
----
-
-## Estructura actual por módulo
-
-| Módulo | Estado | Propósito |
-|---|---|---|
-| Carrito y checkout | Base creada | Flujo de carrito, validaciones y orden |
-| Clientes y autenticación | Base creada | Registro, login, bloqueo y sesión |
-| Catálogo y búsqueda | Base creada | Navegación, búsqueda y detalle |
-| Gestión de inventario | Base creada | Stock, disponibilidad y validaciones |
-| Sistema de reseñas | Base creada | Persistencia y publicación de reseñas |
-| Pagos | Base inicial | Método, confirmación y reintentos |
-| Pedidos | Base inicial | Creación, historial y consistencia |
-| Envíos | Base inicial | Dirección, método, cotización y recálculo |
-| Totales y descuentos | Base inicial | Subtotal, impuestos, cupones y vouchers |
-
----
-
-## Estructura sugerida
+## Estructura general
 
 ```text
-tests/integracion/
+tests/
 ├── README.md
-├── carrito-checkout/
-├── clientes-autenticacion/
-├── catalogo-busqueda/
-├── gestion-inventario/
-├── sistema-resenas/
-├── pagos/
-├── pedidos/
-├── envios/
-└── totales-descuentos/
+├── BaseTestCase.php
+├── bootstrap.php
+├── unitarias/
+├── integracion/
+├── sistema/
+├── aceptacion/
+└── no-funcionales/
+    ├── k6/
+    ├── seguridad/
+    ├── disponibilidad/
+    ├── responsive/
+    ├── mantenibilidad/
+    ├── usabilidad/
+    └── reports/
 ```
 
----
+## Requisitos
 
-## Orden sugerido de ejecución en GitHub Actions
+- PHP 8.1 o superior.
+- Composer.
+- PHPUnit 11.
+- MySQL para las suites que requieren persistencia real.
+- k6 para las pruebas de rendimiento y carga.
+- Una instalación funcional de OpenCart basada en `upload/`.
 
-1. Preparar dependencias y MySQL.
-2. Instalar OpenCart en entorno de prueba.
-3. Ejecutar suites de integración prioritarias.
-4. Ejecutar smoke tests si existen.
-5. Publicar logs y resultados.
+## Preparación del proyecto
 
----
+Desde la raíz del repositorio:
 
-## Variables de entorno compartidas
+```bash
+composer install
+```
+
+La configuración principal de PHPUnit se encuentra en [`phpunit.xml`](../phpunit.xml) y el entorno se inicializa mediante [`bootstrap.php`](bootstrap.php).
+
+## Ejecución
+
+### Pruebas unitarias
+
+```bash
+vendor/bin/phpunit --configuration phpunit.xml
+vendor/bin/phpunit tests/unitarias
+vendor/bin/phpunit tests/unitarias/LoginAndRegisterTest.php
+```
+
+### Pruebas de integración
+
+Pueden requerir una base de datos MySQL preparada y estas variables de entorno:
 
 - `DB_HOST`
 - `DB_PORT`
@@ -120,16 +88,75 @@ tests/integracion/
 - `DB_PASS`
 - `DB_PREFIX`
 
----
-
-## Ejecución sugerida
-
 ```bash
 vendor/bin/phpunit tests/integracion
 ```
 
----
+Consulta [la guía de integración](integracion/README.md) antes de ejecutar suites que modifiquen datos.
 
-## Observación importante
+### Pruebas de sistema y aceptación
 
-Esta estructura no garantiza por sí sola una cobertura total, pero sí deja una base organizada para medir y expandir la cobertura de integración con trazabilidad real hacia código, base de datos y CI/CD.
+Se ejecutan sobre una instalación funcional de `upload/`:
+
+- [Plan de pruebas de sistema](sistema/README.md)
+- [Plan de pruebas de aceptación](aceptacion/README.md)
+
+Cada escenario debe registrar el resultado obtenido y adjuntar evidencia cuando corresponda. Los incumplimientos deben documentarse mediante el formato de incidente de su categoría.
+
+### Pruebas no funcionales
+
+| Categoría | Documento |
+|---|---|
+| Rendimiento y carga | [Guía de k6](no-funcionales/k6/README.md) |
+| Seguridad | [Checklist OWASP](no-funcionales/seguridad/checklist-owasp.md) |
+| Disponibilidad | [Checklist de disponibilidad](no-funcionales/disponibilidad/checklist-disponibilidad.md) |
+| Responsive | [Checklist responsive](no-funcionales/responsive/checklist-responsive.md) |
+| Mantenibilidad | [Checklist de mantenibilidad](no-funcionales/mantenibilidad/checklist-mantenibilidad.md) |
+| Usabilidad | [Checklist de usabilidad](no-funcionales/usabilidad/checklist-usabilidad.md) |
+| Resultados consolidados | [Reportes](no-funcionales/reports/) |
+
+## Cobertura esperada
+
+La cobertura del proyecto se analiza en cinco dimensiones:
+
+1. **Estructural:** existen suites para los módulos prioritarios.
+2. **Funcional:** se validan flujos principales, errores, límites y reglas de negocio.
+3. **Transversal:** se comprueban procesos que atraviesan varios módulos.
+4. **Código y datos reales:** las pruebas relevantes interactúan con la implementación y persistencia del proyecto.
+5. **CI/CD:** las suites automatizadas se ejecutan y conservan sus resultados en el pipeline.
+
+El reporte HTML de cobertura configurado por PHPUnit se genera en:
+
+```text
+reports/coverage/index.html
+```
+
+## Registro de resultados e incidentes
+
+Los resultados deben indicar como mínimo:
+
+- identificador del caso;
+- fecha y ambiente de ejecución;
+- datos utilizados;
+- resultado esperado;
+- resultado obtenido;
+- estado: aprobado, fallido o bloqueado;
+- evidencia asociada;
+- incidente relacionado, cuando exista.
+
+## Buenas prácticas para contribuir
+
+- Ejecutar las suites afectadas antes de enviar cambios.
+- Mantener archivos de prueba con el sufijo `Test.php`.
+- Nombrar los métodos de prueba con el prefijo `test`.
+- Seguir el patrón Arrange–Act–Assert.
+- No incluir credenciales ni datos sensibles.
+- Actualizar la documentación y las evidencias cuando cambie un escenario.
+- Registrar como incidente cualquier incumplimiento reproducible.
+
+## Documentación relacionada
+
+- [Requisitos funcionales](../docs/Requisitos-funcionales/)
+- [Resultados de pruebas funcionales](../docs/Resultado%20de%20pruebas%20funcionales/)
+- [Configuración de PHPUnit](../phpunit.xml)
+- [Repositorio QA OpenCart Testing](https://github.com/DanLAQP/QA-OpenCart-Testing)
