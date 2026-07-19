@@ -1,0 +1,41 @@
+name: Pruebas Unitarias (PHPUnit)
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unitarias:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mysqli, gd, curl, mbstring, zip, openssl
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Create autoload bridge
+        run: |
+          mkdir -p vendor
+          cp tests/autoload-bridge.php vendor/autoload.php
+
+      - name: Run PHPUnit
+        run: |
+          php upload/system/storage/vendor/bin/phpunit --testdox 2>&1 | tee phpunit-output.txt
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultado-pruebas-unitarias
+          path: phpunit-output.txt
+          retention-days: 30
