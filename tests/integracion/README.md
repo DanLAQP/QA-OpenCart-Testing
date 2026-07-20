@@ -253,28 +253,3 @@ Los reportes detallados pueden almacenarse en:
 ```text
 tests/integracion/reports/resultado-AAAA-MM-DD.md
 ```
-
----
-
-## Criterios de aprobación
-
-Una ejecución de integración se considera aprobada cuando:
-
-- PHPUnit termina sin errores ni fallos;
-- la conexión y las operaciones sobre MySQL funcionan;
-- no se producen inconsistencias en las tablas verificadas;
-- los módulos intercambian datos correctamente;
-- los smoke tests responden satisfactoriamente;
-- el proceso devuelve un código de salida exitoso.
-
----
-
-## Buenas prácticas
-
-- Utilizar una base de datos exclusiva para pruebas.
-- No guardar credenciales ni secretos en el repositorio.
-- Preparar y limpiar los datos utilizados por cada caso.
-- Evitar que una prueba dependa del resultado de otra.
-- Mantener las pruebas repetibles y deterministas.
-- Documentar como incidente cualquier fallo reproducible.
-- Actualizar este README cuando cambie la estructura, el pipeline o los comandos de ejecución.
