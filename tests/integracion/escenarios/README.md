@@ -149,32 +149,3 @@ La última ejecución automatizada fue realizada mediante GitHub Actions el 19/0
 | INT-CAT-006 | `testMantienePrecioEntreBusquedaDetalleYCarrito` | `CatalogoBusquedaIntegrationTest.php` |
 | INT-RES-006 | `testActualizaPromedioAlAprobarResena` | `SistemaResenasIntegrationTest.php` |
 | INT-PAG-005 | `testCallbackDuplicadoNoConfirmaPagoDosVeces` | `PagoIntegrationTest.php` |
-
-## Relación con el README principal
-
-El archivo principal `tests/integracion/README.md` debe conservar el panorama general, la estrategia de cobertura, las instrucciones de ejecución y el resumen de resultados.
-
-Este catálogo debe ubicarse en:
-
-```text
-tests/integracion/escenarios/README.md
-```
-
-El README principal puede enlazarlo así:
-
-```markdown
-## Catálogo de escenarios
-
-Se diseñaron 60 escenarios de integración: 55 automatizados y 5 pendientes.
-Consulta el [catálogo y matriz de trazabilidad](escenarios/README.md).
-```
-
-## Criterio de actualización
-
-Cuando se implemente uno de los escenarios pendientes:
-
-1. crear el método PHPUnit sugerido;
-2. ejecutar la suite correspondiente;
-3. cambiar su estado de `Pendiente` a `Automatizado`;
-4. actualizar los totales de este documento;
-5. registrar el resultado del workflow.
