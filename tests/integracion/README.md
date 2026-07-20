@@ -2,6 +2,19 @@
 
 Este árbol organiza las suites de integración del proyecto por dominio funcional y las relaciona con una estrategia de cobertura en **5 capas**.
 
+## Objetivo
+
+Las pruebas de integración verifican que los componentes de OpenCart funcionen correctamente cuando interactúan entre sí, con la base de datos MySQL y con los servicios preparados en el pipeline.
+
+El propósito de esta carpeta es:
+
+- comprobar la comunicación entre módulos;
+- validar reglas de negocio compartidas;
+- verificar la persistencia y consistencia de los datos;
+- probar flujos que atraviesan más de un módulo;
+- ejecutar las suites en un entorno reproducible mediante GitHub Actions;
+- conservar trazabilidad entre las pruebas ejecutadas y sus resultados.
+
 ## Las 5 coberturas que debe cumplir esta base
 
 ### 1. Cobertura estructural
@@ -127,3 +140,109 @@ tests/integracion/
 ```bash
 vendor/bin/phpunit tests/integracion
 ```
+
+Para ejecutar solamente un dominio:
+
+```bash
+vendor/bin/phpunit tests/integracion/carrito-checkout
+vendor/bin/phpunit tests/integracion/gestion-inventario
+```
+
+Antes de ejecutar las pruebas, MySQL debe encontrarse disponible y las variables de entorno deben apuntar a una base de datos exclusiva para pruebas.
+
+---
+
+## Resultado de la ejecución en GitHub Actions
+
+**Fecha:** 19/07/2026  
+**Workflow:** [Ejecución 29708563940](https://github.com/DanLAQP/QA-OpenCart-Testing/actions/runs/29708563940)  
+**Job:** [opencart — 88249347162](https://github.com/DanLAQP/QA-OpenCart-Testing/actions/runs/29708563940/job/88249347162)  
+**Resultado de las pruebas de integración:** ✅ Aprobado  
+**Estado del workflow al elaborar este documento:** En ejecución, manteniendo temporalmente activo el servidor público.
+
+### Resumen de resultados verificados
+
+| Etapa | Resultado | Observación |
+|---|---|---|
+| Inicialización de contenedores | ✅ Aprobado | Los servicios requeridos iniciaron correctamente |
+| Configuración de PHP | ✅ Aprobado | El entorno de PHP quedó disponible |
+| Instalación de dependencias | ✅ Aprobado | Las dependencias se instalaron sin errores |
+| Disponibilidad de MySQL | ✅ Aprobado | El pipeline pudo conectarse al servicio MySQL |
+| Preparación de archivos y almacenamiento | ✅ Aprobado | Se crearon directorios y archivos de configuración |
+| Inicio del servidor PHP | ✅ Aprobado | El servidor local respondió correctamente |
+| Instalación de OpenCart | ✅ Aprobado | La aplicación quedó instalada en el entorno de prueba |
+| Instalación de PHPUnit | ✅ Aprobado | PHPUnit quedó disponible para ejecutar las suites |
+| Verificación de la tabla `oc_order` | ✅ Aprobado | La estructura pudo consultarse correctamente |
+| Ejecución de pruebas de integración | ✅ Aprobado | El paso `Run Integration Tests` terminó con éxito |
+| Smoke test del frontend local | ✅ Aprobado | El frontend local respondió correctamente |
+| Smoke test del administrador local | ✅ Aprobado | El panel administrativo local respondió correctamente |
+| Creación del enlace público temporal | ✅ Aprobado | El túnel público fue creado |
+| Actualización de URL en configuración y BD | ✅ Aprobado | Las URLs públicas se aplicaron correctamente |
+| Smoke test del frontend público | ✅ Aprobado | El frontend público respondió correctamente |
+| Smoke test del administrador público | ✅ Aprobado | El panel administrativo público respondió correctamente |
+
+### Conclusión de la ejecución
+
+La suite de integración se ejecutó satisfactoriamente. El pipeline pudo preparar MySQL, instalar OpenCart, ejecutar PHPUnit y validar el acceso al frontend y al panel administrativo tanto de forma local como mediante el enlace público temporal.
+
+No se registraron fallos en los pasos completados. El job continuaba activo únicamente en el paso `Keep server alive temporarily`, utilizado para mantener disponible el servidor público durante un periodo determinado.
+
+### Datos pendientes del log final
+
+Al momento de elaborar este README, GitHub todavía no permitía descargar el log completo porque el job permanecía en ejecución. Por ello, no se indican cantidades de pruebas, assertions o duración de PHPUnit que todavía no hayan sido verificadas.
+
+Cuando el workflow finalice, se recomienda completar:
+
+| Métrica | Resultado |
+|---|---|
+| Cantidad de tests | Pendiente de confirmar en el log final |
+| Cantidad de assertions | Pendiente de confirmar en el log final |
+| Duración de PHPUnit | Pendiente de confirmar en el log final |
+| Errores | Ninguno registrado en el paso de integración |
+| Fallos | Ninguno registrado en el paso de integración |
+
+---
+
+## Registro de próximas ejecuciones
+
+Para conservar la trazabilidad, cada ejecución posterior debe registrar:
+
+- fecha;
+- enlace del workflow;
+- rama y commit;
+- cantidad de tests y assertions;
+- duración;
+- resultado final;
+- pruebas omitidas o incompletas;
+- incidentes relacionados.
+
+Los reportes detallados pueden almacenarse en:
+
+```text
+tests/integracion/reports/resultado-AAAA-MM-DD.md
+```
+
+---
+
+## Criterios de aprobación
+
+Una ejecución de integración se considera aprobada cuando:
+
+- PHPUnit termina sin errores ni fallos;
+- la conexión y las operaciones sobre MySQL funcionan;
+- no se producen inconsistencias en las tablas verificadas;
+- los módulos intercambian datos correctamente;
+- los smoke tests responden satisfactoriamente;
+- el proceso devuelve un código de salida exitoso.
+
+---
+
+## Buenas prácticas
+
+- Utilizar una base de datos exclusiva para pruebas.
+- No guardar credenciales ni secretos en el repositorio.
+- Preparar y limpiar los datos utilizados por cada caso.
+- Evitar que una prueba dependa del resultado de otra.
+- Mantener las pruebas repetibles y deterministas.
+- Documentar como incidente cualquier fallo reproducible.
+- Actualizar este README cuando cambie la estructura, el pipeline o los comandos de ejecución.
