@@ -158,7 +158,9 @@ Antes de ejecutar las pruebas, MySQL debe encontrarse disponible y las variables
 **Workflow:** [Ejecución 29708563940](https://github.com/DanLAQP/QA-OpenCart-Testing/actions/runs/29708563940)  
 **Job:** [opencart — 88249347162](https://github.com/DanLAQP/QA-OpenCart-Testing/actions/runs/29708563940/job/88249347162)  
 **Resultado de las pruebas de integración:** ✅ Aprobado  
-**Estado del workflow al elaborar este documento:** En ejecución, manteniendo temporalmente activo el servidor público.
+**Estado final del workflow:** ✅ Completado correctamente  
+**Commit evaluado:** `cdf03cb2c989269b97f0be211de61ce8cc00fe8d`  
+**Entorno:** Ubuntu 24.04, PHP 8.2.32, PHPUnit 10.5.64 y MySQL 8.0
 
 ### Resumen de resultados verificados
 
@@ -185,21 +187,51 @@ Antes de ejecutar las pruebas, MySQL debe encontrarse disponible y las variables
 
 La suite de integración se ejecutó satisfactoriamente. El pipeline pudo preparar MySQL, instalar OpenCart, ejecutar PHPUnit y validar el acceso al frontend y al panel administrativo tanto de forma local como mediante el enlace público temporal.
 
-No se registraron fallos en los pasos completados. El job continuaba activo únicamente en el paso `Keep server alive temporarily`, utilizado para mantener disponible el servidor público durante un periodo determinado.
+No se registraron errores ni fallos. El paso `Keep server alive temporarily` mantuvo disponible el servidor público durante 15 minutos y después terminó correctamente. Las tareas de limpieza cerraron los procesos y eliminaron el contenedor MySQL sin afectar el resultado.
 
-### Datos pendientes del log final
-
-Al momento de elaborar este README, GitHub todavía no permitía descargar el log completo porque el job permanecía en ejecución. Por ello, no se indican cantidades de pruebas, assertions o duración de PHPUnit que todavía no hayan sido verificadas.
-
-Cuando el workflow finalice, se recomienda completar:
+### Resultado consolidado de PHPUnit
 
 | Métrica | Resultado |
 |---|---|
-| Cantidad de tests | Pendiente de confirmar en el log final |
-| Cantidad de assertions | Pendiente de confirmar en el log final |
-| Duración de PHPUnit | Pendiente de confirmar en el log final |
-| Errores | Ninguno registrado en el paso de integración |
-| Fallos | Ninguno registrado en el paso de integración |
+| Suites ejecutadas | 10 |
+| Tests ejecutados | 55 |
+| Assertions realizadas | 111 |
+| Errores | 0 |
+| Fallos | 0 |
+| Suites omitidas | 0 |
+| Duración acumulada informada por PHPUnit | 1.890 segundos |
+| Memoria informada por cada suite | 8.00 MB |
+| Resultado final | ✅ Aprobado |
+
+### Resultado por suite
+
+| Suite | Tests | Assertions | Duración | Resultado |
+|---|---:|---:|---:|---|
+| `CarritoCheckoutIntegrationTest.php` | 10 | 25 | 0.040 s | ✅ Aprobado |
+| `CheckoutInventoryIntegrationTest.php` | 4 | 8 | 1.019 s | ✅ Aprobado |
+| `ClientesAutenticacionIntegrationTest.php` | 10 | 24 | 0.683 s | ✅ Aprobado |
+| `CatalogoBusquedaIntegrationTest.php` | 5 | 11 | 0.018 s | ✅ Aprobado |
+| `GestionInventarioIntegrationTest.php` | 5 | 5 | 0.019 s | ✅ Aprobado |
+| `SistemaResenasIntegrationTest.php` | 5 | 10 | 0.023 s | ✅ Aprobado |
+| `PagoIntegrationTest.php` | 4 | 6 | 0.022 s | ✅ Aprobado |
+| `PedidoIntegrationTest.php` | 4 | 9 | 0.024 s | ✅ Aprobado |
+| `EnvioIntegrationTest.php` | 4 | 6 | 0.021 s | ✅ Aprobado |
+| `TotalesDescuentosIntegrationTest.php` | 4 | 7 | 0.021 s | ✅ Aprobado |
+| **Total** | **55** | **111** | **1.890 s** | **✅ Aprobado** |
+
+### Validación HTTP
+
+Los smoke tests locales y públicos del frontend y del panel administrativo respondieron satisfactoriamente. En la validación pública, ambos endpoints devolvieron el código HTTP `200`.
+
+### Advertencias no bloqueantes
+
+El log contiene advertencias que no provocaron fallos:
+
+- GitHub Actions informó que Node.js 20 está deprecado y que `actions/checkout@v4` fue ejecutado mediante Node.js 24.
+- MySQL advirtió sobre opciones de configuración deprecadas y certificados autofirmados del contenedor de pruebas.
+- El comando de MySQL mostró una advertencia por utilizar la contraseña en la línea de comandos.
+
+Estas advertencias no afectaron las 55 pruebas, los 111 assertions ni los smoke tests.
 
 ---
 
